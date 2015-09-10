@@ -1,0 +1,349 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/selenica/core.cljs",
+			"settings":
+			{
+				"buffer_size": 5581,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "resources/public/css/style.css",
+			"settings":
+			{
+				"buffer_size": 693,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Figwheel: Starting server at http://localhost:3449\nFocusing on build ids: dev\nCompiling \"resources/public/js/compiled/selenica.js\" from [\"src\"]...\nSuccessfully compiled \"resources/public/js/compiled/selenica.js\" in 0.515 seconds.\nStarted Figwheel autobuilder\n\nLaunching ClojureScript REPL for build: dev\nFigwheel Controls:\n          (stop-autobuild)                ;; stops Figwheel autobuilder\n          (start-autobuild [id ...])      ;; starts autobuilder focused on optional ids\n          (switch-to-build id ...)        ;; switches autobuilder to different build\n          (reset-autobuild)               ;; stops, cleans, and starts autobuilder\n          (reload-config)                 ;; reloads build config and resets autobuild\n          (build-once [id ...])           ;; builds source one time\n          (clean-builds [id ..])          ;; deletes compiled cljs target files\n          (fig-status)                    ;; displays current state of system\n          (add-dep [org.om/om \"0.8.1\"]) ;; add a dependency. very experimental\n  Switch REPL build focus:\n          :cljs/quit                      ;; allows you to switch REPL to another build\n    Docs: (doc function-name-here)\n    Exit: Control+C or :cljs/quit\n Results: Stored in vars *1, *2, *3, *e holds last exception object\nPrompt will show when figwheel connects to your application\nTo quit, type: :cljs/quit\ncljs.user=> ",
+			"settings":
+			{
+				"buffer_size": 1393,
+				"line_ending": "Windows",
+				"name": "*REPL* [clojurescript]",
+				"scratch": true
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/admin/Documents/dev/selenica",
+		"/C/Users/admin/Documents/dev/selenica/resources",
+		"/C/Users/admin/Documents/dev/selenica/resources/public",
+		"/C/Users/admin/Documents/dev/selenica/resources/public/css",
+		"/C/Users/admin/Documents/dev/selenica/src",
+		"/C/Users/admin/Documents/dev/selenica/src/selenica"
+	],
+	"file_history":
+	[
+		"/C/Users/admin/Documents/dev/selenica/project.clj"
+	],
+	"find":
+	{
+		"height": 38.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/selenica/core.cljs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5581,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								306,
+								306
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/SublimeREPL/config/ClojureScript/clojurescript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "resources/public/css/style.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 693,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1,
+								1
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 350.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 2,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1393,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1393,
+								1393
+							]
+						],
+						"settings":
+						{
+							"auto_complete": true,
+							"auto_indent": true,
+							"detect_indentation": true,
+							"gutter": false,
+							"history_arrows": true,
+							"indent_subsequent_lines": true,
+							"line_numbers": false,
+							"repl": true,
+							"repl_external_id": "clojurescript",
+							"repl_id": "0c051a9149d042b98bb0d0ad9147de79",
+							"repl_restart_args":
+							{
+								"cmd":
+								{
+									"linux":
+									[
+										"lein",
+										"figwheel"
+									],
+									"osx":
+									[
+										"lein",
+										"figwheel"
+									],
+									"windows":
+									[
+										"lein.bat",
+										"figwheel"
+									]
+								},
+								"cwd":
+								{
+									"linux": "$file_path",
+									"osx": "$file_path",
+									"windows": "$file_path"
+								},
+								"encoding": "utf8",
+								"extend_env":
+								{
+									"INSIDE_EMACS": "1"
+								},
+								"external_id": "clojurescript",
+								"soft_quit": "\n(. System exit 0)\n",
+								"syntax": "Packages/Clojure/Clojure.tmLanguage",
+								"type": "subprocess"
+							},
+							"repl_sublime2": false,
+							"smart_indent": false,
+							"spell_check": false,
+							"syntax": "Packages/Clojure/Clojure.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 22.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.724505230533,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "selenica.sublime-project",
+	"replace":
+	{
+		"height": 40.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 1,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
