@@ -1,9 +1,12 @@
 (ns ^:figwheel-always selenica.core
   (:require-macros
-    [selenica.macros :refer [mapf ? ..! each html component]])
-    (:require[om.core :as om :include-macros true]
-              [om.dom :as dom :include-macros true]
-             [om-tools.dom :as el :include-macros true]))
+    [selenica.macros :refer [mapf ? ..! each]]
+    [heh.core :refer [html component]])
+  (:require
+    [om.core :as om :include-macros true]
+    [om.dom :as dom :include-macros true]
+    [heh.core :refer [private private! emit! down!]]
+    [dollar.bill :as $ :refer [$]]))
 
 (enable-console-print!)
 
@@ -11,79 +14,6 @@
 
 (def PRIVATE (atom {}))
 
-(defn owner-key [owner]
-  (let [path (or (.-_rootNodeID owner) "?")] (str path)))
-
-(defn private! [owner korks f]
-  (let [func (if (= (type #()) (type f)) f (fn [v] f))
-        kcol (if (sequential? korks) korks [korks])
-        okey (owner-key owner)]
-    (swap! PRIVATE update-in (cons okey kcol) func )))
-
-(defn private
-  ([owner] (private owner []))
-  ([owner korks]
-  (let [kcol (if (sequential? korks) korks [korks])
-        okey (owner-key owner)]
-    (get-in @PRIVATE (cons okey kcol)))))
-
-
-
-
-
-(defprotocol IJQuery
-  (-append [a b])
-  (-prepend [a b])
-  (-before [a b])
-  (-after [a b])
-  (-prv [a])
-  (-nxt [a])
-  (-detach [a])
-  (-wrap [a b])
-  (-copy [a]))
-
-(extend-type default
-  IJQuery
-  (-append [a b]) (-prepend [a b])
-  (-before [a b]) (-after [a b])
-  (-prv [a]) (-nxt [a])
-  (-detach [a]) (-wrap [a b]))
-
-(extend-type array
-  IJQuery
-  (-append [a b]  (map #(-append % b) a)) 
-  (-prepend [a b] (map #(-prepend % b) a))
-  (-before [a b]  (map #(-before % b) a)) 
-  (-after [a b]   (map #(-after % b) a))
-  (-prv [a]      (map -prv a)) 
-  (-nxt [a]      (map -nxt a))
-  (-detach [a]    (map -detach a)) 
-  (-wrap [a b]    (map #(-wrap % b) a)))
-
-(defn- aseq [b] (if (sequential? b) b [b]))
-
-(extend-type js/Element
-  IJQuery
-  (-append [a b] (mapv #(.appendChild a %) (aseq b))) 
-  (-prepend [a b])
-  (-before [a b]) 
-  (-after [a b])
-  (-prv [a]) 
-  (-nxt [a])
-  (-detach [a]) 
-  (-wrap [a b]))
-
-(defn as-array [a] (.call (.. js/Array -prototype -slice) a))
-
-(defn- >dom [s]
-  (let [d (.createElement js/document "div")]
-    (set! (.-innerHTML d) s)
-    (as-array (.-children d))))
-
-(defn $ [q] 
-  (if (re-find #"^\W*<" q)
-      (>dom q)
-      (as-array (.querySelectorAll js/document q))))
 
 (defn inject-css [id s]
   (let [el (or (first ($ (str "#" id)))
@@ -91,22 +21,7 @@
     (aset el "innerHTML" s)
     (.appendChild (first ($ "head")) el)))
 
-
-
-
-(prn (-clone {}))
-
-(prn (type (first ($ "div"))))
-(prn (-append ($ "div") (first ($ "<span>poo</span>"))) (first ($ "div")))
-(prn ($ "p"))
-  
-
-
-
-
-
-
-
+ 
 
 (def  app-state (atom 
 {:splash {:idx 0}
@@ -137,8 +52,8 @@
 (def drag-cursor (make-img "img/dragcursor.png"))
 
 (component searchbox [data owner opts]
-           (render-state [_ state]
-                         (html (<label "search" (<input)))))
+  (render-state [_ state]
+    (html (<label "search" (<input)))))
 
 (defn do-drag-start [e owner]
   (let [[x y] [(.-clientX e)(.-clientY e)]]
@@ -185,14 +100,14 @@
                     str-x (aget (.-style el) "left")
                     el-x (if (= "" str-x) 0 (js/parseInt str-x))]
                 (aset (.-style el) "left" (str (+ el-x x) "px")))))
-          (for [book books] 
-            (<div.book 
+          (into-array (map 
+            #(<div.book 
               (style {
-                :background (:color book) 
-                :left (:left book)
-                :width (:width book)
-                :height (:height book) }))))))))
-
+                :background (:color %) 
+                :left (:left %)
+                :width (:width %)
+                :height (:height %) }))
+            books)))))))
 
 
 
@@ -203,20 +118,19 @@
         (onDragEnter 
           (fn [e] (aset (.-dataTransfer e) "dropEffect" "move") ))
         (<div#splash 
-
           (onClick (fn [e] (om/transact! data [:splash :idx] inc)))
-          (map-indexed 
+          (into-array (map-indexed 
             #(<img (src %2)
               (style {:opacity 
                 (if (<= (- 5 %1) (:idx (:splash data)))
                   0.0 1.0)}))
-            splash-moons)
+            splash-moons))
           (<h1 "Cabinet Selenica")
           (om/build searchbox data {}))
         (om/build book-scroller data {})))))
 
 
-
+ 
 (om/root main app-state
   {:target (. js/document (getElementById "app"))})
 

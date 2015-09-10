@@ -4,12 +4,13 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
-  :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/clojurescript "0.0-3297"]
-                 [org.clojure/core.async "0.1.346.0-17112a-alpha"]
+  :dependencies [[org.clojure/clojure "1.7.0-beta2"]
+                 [org.clojure/clojurescript "0.0-3308" :classifier "aot" :scope "provided"
+                  :exclusions [org.clojure/tools.reader org.clojure/data.json]]
+                 [org.clojure/core.async "0.1.338.0-5c5012-alpha"]
+                 [org.clojure/core.logic "0.8.9"]
+                 [cljsjs/react "0.13.3-0"]
                  [org.omcljs/om "0.8.8"]
-                 [prismatic/om-tools "0.3.6"]
-                 [org.clojure/data.csv "0.1.3"]
                  [com.cognitect/transit-cljs "0.8.220"]]
 
   :plugins [[lein-cljsbuild "1.0.5"]
