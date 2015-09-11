@@ -3,16 +3,15 @@
     [selenica.macros :refer [mapf ? ..! each]]
     [heh.core :refer [html component]])
   (:require
+    [clojure.string :as string]
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true]
     [heh.core :refer [private private! emit! down!]]
-    [dollar.bill :as $ :refer [$]]))
+    [dollar.bill :as $ :refer [$]]
+    [cognitect.transit :as transit :refer [writer reader read]]
+    [selenica.data :as DATA]))
 
 (enable-console-print!)
-
-
-
-(def PRIVATE (atom {}))
 
 
 (defn inject-css [id s]
@@ -22,13 +21,31 @@
     (.appendChild (first ($ "head")) el)))
 
  
+(defn get-file [url f fail]
+  (when-let [req (new js/XMLHttpRequest)]
+    (set! (.-onreadystatechange req)
+      (fn [e] 
+        (if (= 4 (.-readyState req))
+          (if (= 200 (.-status req)) 
+            (f (.. e -target -response))
+            (when fail (fail e))))))
+    (.open req "GET" url false)
+    (.overrideMimeType req "text/xml; charset=iso-8859-1")
+    ;(set! (.-responseType req) "arraybuffer")
+    (.send req)))
 
-(def  app-state (atom 
+
+ 
+ 
+(defonce  app-state (atom 
 {:splash {:idx 0}
  :context []
  :touch {:velocity [0 0]}
-  }))
+ :view {:screen :splash}
+ :inventory DATA/INVENTORY
 
+  }))
+ 
 (def splash-moons
   (for [f (identity ["001" "002" "003" "004" "005"])]
     (str "img/splash/" f ".png")))
@@ -109,15 +126,63 @@
                 :height (:height %) }))
             books)))))))
 
+;(:description :date :publisher :observations :dimensions :title :author :language :id 
+;  :condition :notes :materials :provenance :domain :id-prov :links)
 
-
-(component main [data owner opts]
+(component listing [data owner opts]
   (render-state [_ state]
     (html
-      (<div#main
-        (onDragEnter 
-          (fn [e] (aset (.-dataTransfer e) "dropEffect" "move") ))
-        (<div#splash 
+      (<div.listing
+        (<div.meta 
+          (<span.date (:date data))
+          (<span.form (str (:domain data) " - " (:language data)))
+          (<span.dimensions 
+            (prn-str (:dimensions data)))
+          
+          (<span.condition (:condition data) (class (:condition data) ))
+          (<span.id (:id data))
+          )
+        (<div.nouns 
+          (<span.title (:title data))
+          (<span.author (:author data))
+          )
+        (<div.details 
+          (into-array (map
+            #(let [
+              english (get-in DATA/english [(:id data) (keyword %)])
+              french (get data (keyword %))]
+              (when (or english french)
+                (<div (<label (str % ": ")) (<span (class (if english "english" "french")) (or english french)))) )
+            ['description 'publisher 'observations 'notes 'materials 'provenance 'links]))
+
+))))) 
+ 
+(def book-sorts 
+{:date #(if (string? (:date %)) 9999999 (:date %))
+ :biggest #(if (and (vector? (:dimensions %)) (> 1 (count (:dimensions %)))) 
+                (let [[w h] (:dimensions %)] (* w h)) 
+                nil)
+ :french #(= (:language %) "Français")})
+
+(def book-filters 
+{:valid-date #(number? (:date %))
+ :french #(= (:language %) "Français")})
+ 
+(component inventory [data owner opts]
+  (render-state [_ state]
+    (html
+      (<div#inventory 
+        (into-array (map #(om/build listing % {}) 
+          (sort-by (:date book-sorts)
+            (filter (:french book-filters)
+            (vals (:inventory data))))))
+        ))))
+ 
+
+(component splash [data owner opts]
+  (render-state [_ state]
+    (html
+      (<div#splash 
           (onClick (fn [e] (om/transact! data [:splash :idx] inc)))
           (into-array (map-indexed 
             #(<img (src %2)
@@ -126,8 +191,18 @@
                   0.0 1.0)}))
             splash-moons))
           (<h1 "Cabinet Selenica")
+          (<button "inventory"
+            (onClick #(om/update! data [:view] {:screen :inventory})))
           (om/build searchbox data {}))
-        (om/build book-scroller data {})))))
+        (om/build book-scroller data {}))))
+
+(def views {:splash splash :inventory inventory})
+
+(component main [data owner opts]
+  (render-state [_ state]
+    (html
+      (<div#main
+        (om/build (get views (:screen (:view data))) data {})))))
 
 
  
@@ -139,4 +214,76 @@
 
 )
 
+
+(comment   
+(prn (identity (mapv (fn [[k v]] 
+  [k (vec (remove nil? (map #(when-let [b (get v %1)] [%2 b]) 
+    [:description :observations :notes :materials][-1 -2 -3 -4])))]) DATA/INVENTORY)))
+
+(prn (into {} 
+  (mapv (fn [[k vs]]
+    [k (into {} 
+      (map (juxt (comp {-1 :description -2 :observations -3 :notes -4 :materials} first)
+              last)
+       vs))]) 
+    DATA/english)))
+)
+
  
+(defn ->edn [o] (transit/write (transit/writer :json) o))
+(defn edn-> [s] (transit/read (transit/reader :json) s))
+
+(def INV (atom nil))
+
+(declare parse-csv-cells float-str? int-str?)
+
+(defn parse-csv-cells [s] (map (comp #(string/trim %) #(string/replace % #"[\"]" "") first)  
+  (re-seq #"([\"]([^\"]+)[\"])|,(,)|([^,\"]+)" (string/replace s #"\"\"" "'"))))
+
+(defn parse-french-dimensions [s] 
+  (mapv js/parseFloat (string/split (string/replace s #"," ".") #"\W+x\W+" )))
+
+(defn remove-nil-kv [m]
+  (into {} (filter #(not (nil? (last %))) m)))
+
+(defn alter-inventory-kvs [m]
+    (if (string? (:dimensions m))
+      (update-in m [:dimensions] parse-french-dimensions)
+      m))
+ 
+(defn float-str? [s] (re-seq #"^[1-9][0-9]*\.[0-9]*$" s))
+(defn int-str? [s] (re-seq #"^[1-9][0-9]*$" s))
+
+(defn cell-cast [s]
+  (cond (not (string? s)) s
+        (#{",," " " ""} s) nil 
+        (float-str? s) (js/parseFloat s)
+        (int-str? s) (js/parseInt s)
+        :else s))
+
+(defn parse-csv [buffer]
+  (let [rows (string/split buffer #"\n")
+        schema (mapv keyword 
+                (take-while #(not= "" %) 
+                  (string/split (first rows) ",")))
+        len (count schema)
+        data (map #(zipmap schema (map cell-cast (take len (parse-csv-cells %)))) (rest rows))
+        edn (into {} (map #(vector (:id %) (alter-inventory-kvs (remove-nil-kv %))) data))]
+        (prn edn)
+        edn
+        )) 
+
+ 
+(comment 
+(get-file "./data/inventory.csv" 
+  #(do (reset! INV (parse-csv %))) 
+  #(prn "fail to load xls"))
+
+
+(get-file "./data/inventory.edn" 
+  #(do ;(prn (edn-> %))
+    ) 
+  #(prn "fail to load xls"))
+
+
+  )

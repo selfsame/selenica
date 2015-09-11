@@ -53,3 +53,111 @@ div.book {
 	position: absolute;
 	bottom:0px;
 }
+
+
+
+
+
+div.listing{
+	position:relative;
+	background-color:#1E1E1E;
+	margin:0.2em 0em;
+	padding:0.5em 0.5em 0.5em;
+	display:table;
+	width:100%;
+	height: 5em;
+	font-size:1em;
+	float:left;
+}
+
+div.listing .meta{
+	position:relative;
+	margin:0em 0em .6em;
+	padding: 0em 0em .4em 0em;
+	color:silver;
+	font-family:courier, mono-spaced, serif;
+	font-size:0.8em;
+	border-bottom: 1px dotted gray;
+}
+div.listing .meta span{
+	margin: 0em 3em 0em 0em;
+
+}
+div.listing .date{
+	display:inline-block;
+	/*position:absolute;*/
+	color:cyan;
+}
+
+div.listing .id{
+	float:right;
+}
+
+div.listing .condition{
+	float:right;
+	padding: 0em .3em;
+color:white; font-weight:bold;}
+
+div.listing .condition.A{ background-color:green;}
+div.listing .condition.B{ background-color:blue;}
+div.listing .condition.C{ background-color:brown;}
+div.listing .condition.D{ background-color:orange;}
+div.listing .condition.F{ background-color:red;}
+
+
+div.listing .nouns{
+	display:inline-block;
+	float:left;
+	font-size:1.4em;
+	font-family:georgia, serif;
+	width:45%;
+	margin-right:2%;
+}
+
+div.listing .nouns span{
+	display:block;
+	text-align:center;
+	float:left;
+	clear:left;
+	padding: 0em 0em .2em;
+	width:100%;
+	color:#DDC37A;
+}
+
+div.listing .nouns  .author{
+	font-size:0.8em;
+	color:#70B2EF;
+	font-family:georgia, serif;
+}
+
+div.listing .details{
+	display:inline-block;
+	float:left;
+	font-size:0.8em;
+	font-family:courier;
+	width:50%;
+}
+
+div.listing .details span{
+	display:inline;
+
+	/*clear:both;*/
+}
+
+div.listing .details label{
+	display:inline-block;
+	clear:left;
+	float:left;
+	width: 100px;
+	overflow:hidden;
+	text-align:right;
+	margin-right:.5em;
+	color:tomato;
+}
+
+div.listing .details span.english{
+	color:#89E1E8;
+}
+div.listing .details span.french{
+	font-style:italic;
+}
