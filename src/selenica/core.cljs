@@ -166,6 +166,7 @@
 
 (def book-filters 
 {:valid-date #(number? (:date %))
+ :map #(re-find #"c|Cartes" (:domain %))
  :french #(= (:language %) "Français")})
  
 (component inventory [data owner opts]
@@ -174,7 +175,12 @@
       (<div#inventory 
         (into-array (map #(om/build listing % {}) 
           (sort-by (:date book-sorts)
-            (filter (:french book-filters)
+            (filter 
+              (every-pred  
+                (:valid-date book-filters)
+                (:map book-filters)
+                (complement (:french book-filters))
+                )
             (vals (:inventory data))))))
         ))))
  
