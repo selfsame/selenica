@@ -140,50 +140,57 @@
             (prn-str (:dimensions data)))
           
           (<span.condition (:condition data) (class (:condition data) ))
-          (<span.id (:id data))
-          )
+          (<span.id (:id data)))
         (<div.nouns 
           (<span.title (:title data))
-          (<span.author (:author data))
-          )
+          (<span.author (:author data)))
         (<div.details 
           (into-array (map
             #(let [
               english (get-in DATA/english [(:id data) (keyword %)])
               french (get data (keyword %))]
               (when (or english french)
-                (<div (<label (str % ": ")) (<span (class (if english "english" "french")) (or english french)))) )
+                (<div (<label (str % ": ")) 
+                  (<span (class (if english "english" "french")) 
+                    (or english french)))))
             ['description 'publisher 'observations 'notes 'materials 'provenance 'links]))
-
-))))) 
+ ))))) 
  
-(def book-sorts 
-{:date #(if (string? (:date %)) 9999999 (:date %))
- :biggest #(if (and (vector? (:dimensions %)) (> 1 (count (:dimensions %)))) 
-                (let [[w h] (:dimensions %)] (* w h)) 
-                nil)
- :french #(= (:language %) "Français")})
+(def book-sorts {
+  :date #(if (string? (:date %)) 9999999 (:date %))
+  :biggest #(if (and (vector? (:dimensions %)) (> 1 (count (:dimensions %)))) 
+                (let [[w h] (:dimensions %)] (* w h)))})
 
-(def book-filters 
-{:valid-date #(number? (:date %))
- :map #(re-find #"c|Cartes" (:domain %))
- :french #(= (:language %) "Français")})
+(def book-filters {
+  :valid-date #(number? (:date %))
+  :map #(re-find #"c|Cartes" (:domain %))
+  :french #(= (:language %) "Français")})
  
 (component inventory [data owner opts]
   (render-state [_ state]
     (html
       (<div#inventory 
+          (ref "scroller") 
+          (draggable true)
+          (style {:position :absolute :overflow :hidden})
+          (onDragStart (fn [e] (do-drag-start e owner)))
+          (onDragEnd (fn [e] (do-drag-end e owner)))
+          (onDrag 
+            (fn [e] 
+              (let [[x y] (do-drag e owner)
+                    el (om/get-node owner "scroller")
+                    str-x (aget (.-style el) "top")
+                    el-x (if (= "" str-x) 0 (js/parseInt str-x))]
+                (aset (.-style el) "top" (str (+ el-x y) "px")))))
         (into-array (map #(om/build listing % {}) 
           (sort-by (:date book-sorts)
             (filter 
               (every-pred  
                 (:valid-date book-filters)
                 (:map book-filters)
-                (complement (:french book-filters))
+                ;(complement (:french book-filters))
                 )
-            (vals (:inventory data))))))
-        ))))
- 
+            (vals (:inventory data))))))))))
 
 (component splash [data owner opts]
   (render-state [_ state]

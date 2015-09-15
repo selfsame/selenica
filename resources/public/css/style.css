@@ -3,8 +3,9 @@
 body {
     margin:0px;
     background:black;
-    color:white;}
-
+    color:white;
+    overflow:hidden;
+}
 #splash {
 	border:1px solid black;
 	max-width:500px;
