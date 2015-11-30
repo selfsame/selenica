@@ -1,0 +1,211 @@
+ Volume in drive C is VISTA64
+ Volume Serial Number is 4096-8CC9
+
+ Directory of C:\Users\jparker\Desktop\PROJECTS\joe\dev\selenica\resources\public\img\photos
+
+11/10/2015  12:13 PM    <DIR>          .
+11/10/2015  12:13 PM    <DIR>          ..
+10/27/2009  09:54 AM         2,433,798 Amedee Guillemin 1866 photo Delarue.jpg
+06/14/2009  09:21 AM        11,439,577 Apollo Over the Moon.jpg
+08/12/2009  08:16 AM         8,107,298 Apollo XI landing map signed B Aldrin.jpg
+08/12/2009  08:14 AM         7,840,100 Apollo XI landing map.jpg
+12/16/2009  07:12 PM         7,852,147 Beer & Madler der Mond.jpg
+06/06/2009  01:14 PM         2,710,881 Beer and Madler Beschreibung des Mondes.jpg
+06/06/2009  12:45 PM        17,660,865 Beer and Madler Mappa Selenographica.jpg
+06/06/2009  12:50 PM         4,368,432 Beer and Madler moon map.jpg
+12/16/2009  06:12 PM         7,852,147 Ber & Madler der Mond.jpg
+08/11/2009  08:49 AM        10,055,184 Bianchini Hesperi.jpg
+08/11/2009  08:53 AM         3,261,882 Bianchini Lunar craters.jpg
+08/11/2009  08:51 AM         1,575,754 Bianchini Plato crater.jpg
+09/10/2009  04:34 PM         3,387,066 Borri  Collecta Astronomica.jpg
+09/10/2009  04:32 PM         4,893,581 Borri cover.jpg
+09/10/2009  04:35 PM         6,894,136 Borri moon map p137.jpg
+09/10/2009  04:37 PM         3,104,632 Borri moon map page 146.jpg
+08/17/2009  03:42 PM         4,276,879 Cassini Gio. Dom.jpg
+10/28/2009  07:46 AM         3,906,571 Cassini Institutions Astro keill John.jpg
+10/28/2009  07:50 AM         6,127,143 Cassini Institutions Keill cover.jpg
+10/28/2009  07:48 AM         6,854,171 Cassini Moon map in Institutions Astro.jpg
+08/11/2009  08:35 AM         2,165,059 Deseilligny platus 18 Nov 1901.jpg
+08/11/2009  08:32 AM         1,840,500 Deseilligny Platus crater.jpg
+08/11/2009  08:30 AM         4,296,623 Deseilligny.jpg
+11/10/2015  12:13 PM                 0 dir.txt
+07/08/2009  08:15 AM        19,670,974 Divini moon map.jpg
+12/15/2009  06:51 PM        17,987,105 Dopplemayer Atlas Celestis.jpg
+11/17/2009  06:33 PM         3,851,665 Elger Lunar Studies.jpg
+10/27/2009  09:58 AM         1,728,820 Elger the Moon 1895.jpg
+11/17/2009  06:32 PM         1,470,950 Elger Walter crater drawing 1889.jpg
+10/27/2009  09:36 AM         3,240,999 Face inconnue 1960.jpg
+10/27/2009  09:35 AM         3,858,124 Face Inconnue back cover.jpg
+10/27/2009  09:33 AM         5,016,167 Face Inconnue de la Lune cover.jpg
+06/14/2009  01:13 PM         2,464,073 Fauth Der mond.jpg
+06/14/2009  01:15 PM         2,895,277 Fauth Plato crater.jpg
+11/16/2009  05:41 PM         2,327,615 first sight to first step.jpg
+06/16/2009  09:19 AM         8,217,123 Fontana 001.jpg
+06/16/2009  09:23 AM         2,971,775 fontana 002.jpg
+06/16/2009  09:26 AM         7,800,583 Fontana 003.jpg
+06/16/2009  09:28 AM         2,757,110 Fontana 004.jpg
+06/16/2009  09:50 AM         6,991,837 Fontana 006.jpg
+06/01/2009  09:39 AM           962,340 Fontana frontispisce.jpg
+06/01/2009  04:01 PM         1,085,072 fontana moon.jpg
+12/17/2009  11:54 AM         2,387,199 Fontana rescan 1.jpg
+06/14/2009  05:55 PM           491,494 Fontana.jpg
+11/16/2009  05:51 PM         4,047,869 Foot print Apollo II Nasa.jpg
+06/16/2009  08:41 AM         4,954,431 Galilei 002.jpg
+06/16/2009  09:10 AM         2,132,988 Galilei 003.jpg
+06/16/2009  09:11 AM         1,232,100 Galilei 004.jpg
+06/16/2009  08:36 AM         1,178,523 Galilei descrip.jpg
+06/16/2009  08:37 AM         5,027,501 Galilei invoice.jpg
+06/14/2009  05:52 PM           487,576 Galilei.jpg
+06/16/2009  09:57 AM         5,303,636 Galileo descrition vendor.jpg
+06/01/2009  09:30 AM         1,523,062 Galileo moons.jpg
+12/17/2009  11:44 AM         5,268,562 Galileo rescan 1.jpg
+12/17/2009  11:47 AM         1,347,260 Galileo rescan 2.jpg
+06/14/2009  10:12 AM         6,733,864 Geologic Maps Howard Copernicus.jpg
+06/14/2009  10:15 AM         6,797,988 Geologic Maps US Geo Survey Copernicus.jpg
+11/18/2009  06:18 PM         1,795,716 Goodacre The Moon with Peace and others photos copy.jpg
+06/17/2009  08:18 AM         5,066,727 Hevelius 002.jpg
+06/17/2009  08:20 AM         7,596,370 Hevelius 003.jpg
+06/17/2009  08:21 AM        13,234,706 Hevelius 004.jpg
+06/17/2009  08:24 AM        14,504,309 Hevelius 005.jpg
+06/02/2009  07:21 AM         1,739,693 Hevelius moon.jpg
+06/02/2009  07:16 AM           508,795 Hevelius Selenographia.jpg
+06/14/2009  05:58 PM           486,339 Hevelius.jpg
+06/07/2011  01:56 PM         1,640,252 Historic arrival.jpg
+07/21/2009  05:07 PM         6,324,211 HP Wilkins P Moore The MOON.jpg
+06/14/2009  09:46 AM         9,039,675 Jet Propulsion Lab Ranger IX moon.jpg
+06/14/2009  09:43 AM         7,648,793 Jet Propulsion Laboratory Ranger IX.jpg
+10/27/2009  09:50 AM         9,526,273 John Phillips cover.jpg
+10/27/2009  09:51 AM         6,278,948 John Phillips crater.jpg
+10/27/2009  09:43 AM         5,005,372 John Phillips Surface of the Moon 1868.jpg
+10/28/2009  08:07 AM         2,616,714 Joseph Emil Nurnberger with Madler moon map.jpg
+06/02/2009  07:44 AM           633,125 Keill Introduction.jpg
+06/02/2009  07:41 AM         1,879,165 Keill moon.jpg
+07/08/2009  08:08 AM        10,740,526 Kircher Divini moon map.jpg
+08/13/2009  02:11 PM        14,682,283 Kosofsky & Farouk El-Baz Lunar Orbiter.jpg
+06/14/2009  09:31 AM         3,828,712 Kosofsky El-Baz The Moon as Viewed by Lunar Orbiter.jpg
+06/14/2009  09:33 AM         8,597,335 Kosofsky Lunar Orbiter Moon view.jpg
+06/04/2009  09:42 AM         1,103,034 Krieger Mond-atlas.jpg
+06/04/2009  09:59 AM           620,385 Krieger mondatlas moon.jpg
+06/04/2009  10:10 AM         2,805,500 Krieger mondatlas triest moon.jpg
+06/04/2009  10:05 AM         1,601,854 Krieger mondatlas triest.jpg
+06/14/2009  12:51 PM         2,758,011 Kuiper Photo Lunar Atlas moon.jpg
+06/14/2009  01:02 PM         4,460,711 Kuiper,Photographic Lunar Atlas copy.jpg
+07/17/2009  03:16 PM        22,449,327 Le Morvan Carte photo de la lune.jpg
+07/17/2009  03:17 PM        10,929,977 Le Morvan moon.jpg
+09/12/2009  03:08 PM         3,880,024 Lick Observatory frontispice.jpg
+09/12/2009  03:10 PM         7,547,531 Lick Observatory Langrenus crater.jpg
+07/29/2009  04:21 PM         9,292,515 Lick Observatory the Moon age 10-4days.jpg
+09/12/2009  03:06 PM        10,534,257 Lick Observatory.jpg
+06/03/2009  04:27 PM           911,132 Lick weineck moon.jpg
+06/03/2009  04:22 PM           651,140 Lick Weineck.jpg
+07/17/2009  03:20 PM         8,299,951 Loewy and Puiseux Atlas Photographique de la Lune.jpg
+06/04/2009  04:54 PM         1,997,267 Lohrmann composite moon map.jpg
+06/03/2009  04:31 PM         1,146,791 lohrmann mondcharte.jpg
+06/03/2009  04:37 PM         2,862,146 Lohrmann moon map.jpg
+06/03/2009  04:42 PM         1,903,389 Lohrmanns Ubersichtskarte.jpg
+06/03/2009  04:50 PM         3,230,004 Lorhmanns quarter moon.jpg
+10/27/2009  09:26 AM         2,852,662 Lunar Atlas Space S L full moon Lick plate #22.jpg
+10/27/2009  08:35 AM         5,058,018 Lunar Atlas Space Science lab 1964 cover.jpg
+10/27/2009  09:24 AM         1,712,341 Lunar Atlas Space Science Lab.jpg
+07/09/2009  08:19 AM         4,548,455 Lunar Cartographic Dossier cover.jpg
+07/09/2009  08:13 AM         7,376,769 Lunar Cartographic Dossier Nasa moon map.jpg
+07/09/2009  08:14 AM         1,387,782 Lunar Cartographic Dossier Nasa.jpg
+10/27/2009  09:29 AM         6,347,722 Lunar Formations Wesley and Blagg.jpg
+10/27/2009  09:31 AM        12,425,353 Lunar map Wesley and Blagg.jpg
+08/13/2009  02:18 PM         7,640,144 Lunar Orbiter southern zone.jpg
+08/13/2009  02:16 PM        11,082,909 Lunar Orbiter stereoscopic view.jpg
+08/13/2009  02:13 PM         4,903,732 Lunar Orbiter.jpg
+07/29/2009  03:50 PM         8,880,258 Madler Moon Map 1837 small scale 02.jpg
+07/29/2009  03:51 PM        13,275,145 Madler Moon Map 1837 small scale.jpg
+06/14/2009  09:19 AM         3,342,170 Mazursky Colton El-Baz Appllo Over the Moon.jpg
+08/17/2009  03:36 PM         2,679,766 N Bion with Cassini Carte de la Lune.jpg
+10/28/2009  08:21 AM         6,068,838 N T Bobrovnikoff Copernicus crater Shaler plate.jpg
+10/28/2009  08:25 AM         7,034,726 N T Bobrovnikoff Natural environment of the moon cover.jpg
+10/28/2009  08:19 AM         2,503,897 N T Bobrovnikoff.jpg
+10/27/2009  09:27 AM         2,454,418 Named Lunar Formation cover.jpg
+07/17/2009  03:23 PM         6,040,947 NASA Lunar Carto  Moon map.jpg
+07/17/2009  03:24 PM         1,303,642 NASA Lunar carto cover.jpg
+07/17/2009  03:22 PM         3,811,260 NASA Lunar Cartographic Dossier.jpg
+06/05/2009  05:04 PM         6,199,266 Nasmyth Carpenter moon.jpg
+06/05/2009  05:07 PM         3,147,296 Nasmyth Carpenter the Moon considered.jpg
+06/03/2009  07:56 AM           554,587 Neison der mond.jpg
+08/11/2009  08:40 AM         2,983,873 Neison Moon map.jpg
+06/03/2009  08:03 AM         1,721,871 Neison moon.jpg
+08/11/2009  08:38 AM         2,261,254 Neison Plato Crater.jpg
+12/17/2009  12:15 PM         1,780,417 Neison rescan 1.jpg
+12/17/2009  12:17 PM         3,059,537 Neison rescan 2.jpg
+08/11/2009  08:36 AM         7,051,541 Neison The Moon.jpg
+08/11/2009  08:44 AM         1,485,812 Niesten moon photo.jpg
+08/11/2009  08:42 AM         3,918,543 Niesten Paysages lunaires.jpg
+10/28/2009  08:08 AM        11,287,959 Nurnberger Madler moon map.jpg
+10/27/2009  09:40 AM         5,252,417 Obs Bruxelles 1883 intro.jpg
+10/27/2009  09:39 AM         3,246,670 Obs Bruxelles cover 1883.jpg
+10/27/2009  09:41 AM         4,060,850 Obs Bruxelles moon craters.jpg
+11/18/2009  06:21 PM         2,933,806 Peace Francis photo of lunar surface in Goodacre.jpg
+10/27/2009  09:38 AM         4,622,460 Photo face inconnue de la lune.jpg
+07/29/2009  04:13 PM         8,848,092 Photos Lick Observatory Moore Mayall and Chappell.jpg
+07/29/2009  04:19 PM         6,255,937 Photos taken at the Lick Observatory.jpg
+06/04/2009  05:18 PM         8,578,893 Pickering harvard atlas.jpg
+06/04/2009  11:14 AM           842,904 Pickering the moon.jpg
+06/02/2009  07:33 AM           477,051 proctor rutherfurd moon.jpg
+06/04/2009  04:57 PM         4,249,113 Proctor the Moon.jpg
+12/15/2009  06:46 PM         5,550,341 R HOOKE in Doppelmayr.jpg
+08/17/2009  05:24 PM         8,494,611 Ranger IX Camera A photo.jpg
+08/17/2009  05:26 PM        14,204,001 Ranger IX Cameras A,B and P.jpg
+06/14/2009  09:56 AM        11,144,014 Ranger IX lunar Chart Alphonsus.jpg
+06/14/2009  09:54 AM         6,065,592 Ranger IX Lunar Chart.jpg
+08/17/2009  05:14 PM        13,595,028 Ranger VII 3vol Cameras A,B and P.jpg
+08/17/2009  05:11 PM         6,324,125 Ranger VII Camera A moon photo.jpg
+07/29/2009  04:53 PM        13,664,183 Rectified Lunar Atlas plate W119 1919.jpg
+07/29/2009  04:55 PM        16,217,898 Rectified Lunar Atlas.jpg
+06/14/2009  06:02 PM           479,897 Riccioli.jpg
+06/01/2009  04:10 PM         2,114,593 Ricciolo Almagestum.jpg
+06/04/2009  04:56 PM        18,626,899 ricciolo moon map.jpg
+07/17/2009  03:33 PM        10,481,964 Rutherford Moon first quarter in Ecole Polytechnique Cours d'Astronomie.jpg
+12/16/2009  07:08 PM        19,717,947 Rutherfurd & Proctor moon photos.jpg
+12/16/2009  07:04 PM         9,121,969 Rutherfurd Moon photograph.jpg
+06/07/2011  02:27 PM         1,017,899 S RITZ VALET.jpg
+06/04/2009  05:23 PM         4,199,563 Scheiner atlas.jpg
+06/04/2009  05:25 PM         4,160,999 Scheiner moon.jpg
+06/06/2009  12:36 PM         8,935,185 Schmidt Charte der Gebirge des Mondes.jpg
+06/03/2009  07:45 AM           748,142 schmidt der mond intro.jpg
+06/03/2009  07:44 AM         2,037,270 schmidt der mond.jpg
+06/06/2009  12:34 PM        15,791,727 Schmidt moon map.jpg
+06/14/2009  09:02 AM         4,753,529 Schroeter moon detail.jpg
+12/17/2009  12:06 PM         5,536,229 Schroeter rescan 1.jpg
+06/14/2009  08:42 AM         4,864,084 Schroeter seleno fragmente.jpg
+06/14/2009  09:07 AM         3,067,711 Schroeter Valley.jpg
+06/03/2009  07:51 AM           549,423 shmidt moon copy2.jpg
+06/03/2009  07:50 AM           966,626 shmidt moon.jpg
+06/04/2009  04:56 PM         2,274,080 Sidereus nuncius title page.jpg
+06/01/2009  09:24 AM         1,321,517 sidereus.jpg
+08/14/2009  08:16 AM        11,965,798 Surveyor 5 atlas.jpg
+08/14/2009  08:20 AM         4,384,857 Surveyor 5 picture mosaic.jpg
+08/14/2009  08:17 AM         4,513,720 Surveyor 5.jpg
+11/17/2009  06:27 PM         5,019,545 T G Elger lunar drawings.jpg
+11/17/2009  06:35 PM           598,946 T G Elger portrait.jpg
+10/28/2009  07:57 AM         6,971,719 T Gwyn Elger moon map.jpg
+10/27/2009  09:57 AM         5,622,345 T Gwyn Elger the Moon cover.jpg
+11/18/2009  09:59 AM           505,322 The Moon microscope phot slide.jpg
+11/18/2009  09:30 AM         1,111,783 The Moon Microscopic photo slide.jpg
+11/18/2009  09:32 AM           121,292 The Moon Microscopic photograph.jpg
+06/04/2009  08:06 AM         2,416,084 Tobiae Mayer moon.jpg
+06/04/2009  08:04 AM         1,552,958 tobiae mayeri.jpg
+01/06/2011  03:05 PM           698,385 TWD_CABINET_CURIOSITES_6_045_001.jpg
+07/29/2009  04:36 PM         5,771,084 Valentiner moon photo.jpg
+07/29/2009  04:34 PM         9,537,038 W Valentiner Lunar Atlas.jpg
+11/14/2009  12:17 PM         4,953,900 Walter Goodacre in Splendor of the Heaven.jpg
+11/14/2009  12:21 PM         2,740,693 Walter Goodacre Map of the Moon.jpg
+11/14/2009  12:24 PM         1,813,755 Walter Goodacre Section I map of the Moon.jpg
+11/14/2009  12:20 PM         1,508,430 Walter Goodacre the Moon and Moon map.jpg
+10/27/2009  09:56 AM         2,648,676 Warren De La Rue moon photo in Guillemin.jpg
+06/04/2009  08:20 AM           855,365 Weineck moon.jpg
+06/04/2009  08:15 AM         1,578,663 Weinek astronomische.jpg
+07/21/2009  05:11 PM         4,907,839 Wilkins map of the Moon Mare Nubium section.jpg
+08/13/2009  11:37 AM         4,540,484 Wilkins Mare Nubium map of moon VII.jpg
+08/13/2009  01:59 PM         3,662,424 Wilkins the moon cover.jpg
+08/13/2009  01:56 PM         2,805,379 Wilkins the moon.jpg
+06/06/2009  12:13 PM        18,525,000 Zahn Eimmart moon.jpg
+06/06/2009  12:16 PM         9,366,231 Zahn Specula physico mathematico historica.jpg
+             202 File(s)  1,063,750,937 bytes
+               2 Dir(s)  143,641,088,000 bytes free

@@ -8,42 +8,98 @@
 	"buffers":
 	[
 		{
+			"contents": "(ns ^:figwheel-always selenica.core\n  (:require-macros\n    [selenica.macros :refer [mapf ? ..! each]]\n    [heh.core :refer [html component]])\n  (:require\n    [clojure.string :as string]\n    [om.core :as om :include-macros true]\n    [om.dom :as dom :include-macros true]\n    [heh.core :refer [private private! emit! down!]]\n    [dollar.bill :as $ :refer [$]]\n    [cognitect.transit :as transit :refer [writer reader read]]\n    [selenica.data :as DATA]))\n\n(enable-console-print!)\n\n\n(defn inject-css [id s]\n  (let [el (or (first ($ (str \"#\" id)))\n               (first ($ (str \"<style id='\" id \"'></style>\"))))]\n    (aset el \"innerHTML\" s)\n    (.appendChild (first ($ \"head\")) el)))\n\n \n(defn get-file [url f fail]\n  (when-let [req (new js/XMLHttpRequest)]\n    (set! (.-onreadystatechange req)\n      (fn [e] \n        (if (= 4 (.-readyState req))\n          (if (= 200 (.-status req)) \n            (f (.. e -target -response))\n            (when fail (fail e))))))\n    (.open req \"GET\" url false)\n    (.overrideMimeType req \"text/xml; charset=iso-8859-1\")\n    ;(set! (.-responseType req) \"arraybuffer\")\n    (.send req)))\n\n\n \n \n(defonce  app-state (atom \n{:splash {:idx 0}\n :context []\n :touch {:velocity [0 0]}\n :view {:screen :splash}\n :inventory DATA/INVENTORY\n\n  }))\n \n(def splash-moons\n  (for [f (identity [\"001\" \"002\" \"003\" \"004\" \"005\"])]\n    (str \"img/splash/\" f \".png\")))\n\n(def books\n   (reverse (reduce \n  #(cons (assoc %2 :left \n      (+ 5 (:left (first %1)) (:width (first %1)))) %1) \n  (for [i (range 80)]\n    {:width (+ 15 (rand-int 20)) \n      :height (+ 105 (rand-int 20)) \n     :color (rand-nth [\"brown\" \"tomato\" \"purple\" \"gray\" \"blue\"])}))))\n\n\n\n(defn make-img [path]\n  (let [img (.createElement js/document \"img\")]\n    (aset img \"src\" path )\n    img))\n\n(def drag-cursor (make-img \"img/dragcursor.png\"))\n\n(component searchbox [data owner opts]\n  (render-state [_ state]\n    (html (<label \"search\" (<input)))))\n\n(defn do-drag-start [e owner]\n  (let [[x y] [(.-clientX e)(.-clientY e)]]\n    (.setDragImage (.-dataTransfer e) drag-cursor 16 16)\n    (.setData (.-dataTransfer e) \"Text\" \"books\")\n    (aset (.-dataTransfer e) \"effectAllowed\" \"move\")\n\n    (private! owner :dragstart [x y])\n    (private! owner :draglast [x y])\n    (inject-css \"force\" \"body{cursor:move !important;} \")\n    (.stopPropagation e)))\n\n(defn do-drag [e owner]\n  (let [[x y] [(.-clientX e)(.-clientY e)]\n        [dx dy] (mapv - [x y] (private owner :draglast) )]\n        (.preventDefault e)\n    (if (= [0 0] [x y])\n      [0 0]\n      (do (private! owner :draglast [x y])\n          [dx dy]))))\n\n(defn do-drag-end [e owner]\n  (let [[x y] [(.-clientX e)(.-clientY e)]]\n    (private! owner :dragstart [x y])\n    (private! owner :draglast [x y])\n    (inject-css \"force\" \"\")\n    (.stopPropagation e)))\n\n\n\n(component book-scroller [data owner opts]\n  (render-state [_ state]\n    (html\n      (<div.footer\n        (<div.scroller.horizontal\n          (ref \"scroller\") \n          (draggable true)\n          (onDragStart (fn [e] (do-drag-start e owner)))\n          (onDragEnd (fn [e] (do-drag-end e owner)))\n          (onDrag \n            (fn [e] \n              (let [[x y] (do-drag e owner)\n                    el (om/get-node owner \"scroller\")\n                    str-x (aget (.-style el) \"left\")\n                    el-x (if (= \"\" str-x) 0 (js/parseInt str-x))]\n                (aset (.-style el) \"left\" (str (+ el-x x) \"px\")))))\n          (into-array (map \n            #(<div.book \n              (style {\n                :background (:color %) \n                :left (:left %)\n                :width (:width %)\n                :height (:height %) }))\n            books)))))))\n\n;(:description :date :publisher :observations :dimensions :title :author :language :id \n;  :condition :notes :materials :provenance :domain :id-prov :links)\n\n(component listing [data owner opts]\n  (render-state [_ state]\n    (html\n      (<div.listing\n        (<div.meta \n          (<span.date (:date data))\n          (<span.form (str (:domain data) \" - \" (:language data)))\n          (<span.dimensions \n            (prn-str (:dimensions data)))\n          \n          (<span.condition (:condition data) (class (:condition data) ))\n          (<span.id (:id data)))\n        (<div.nouns \n          (<span.title (:title data))\n          (<span.author (:author data)))\n        (<div.details \n          (into-array (map\n            #(let [\n              english (get-in DATA/english [(:id data) (keyword %)])\n              french (get data (keyword %))]\n              (when (or english french)\n                (<div (<label (str % \": \")) \n                  (<span (class (if english \"english\" \"french\")) \n                    (or english french)))))\n            ['description 'publisher 'observations 'notes 'materials 'provenance 'links]))\n ))))) \n \n(def book-sorts {\n  :date #(if (string? (:date %)) 9999999 (:date %))\n  :biggest #(if (and (vector? (:dimensions %)) (> 1 (count (:dimensions %)))) \n                (let [[w h] (:dimensions %)] (* w h)))})\n\n(def book-filters {\n  :valid-date #(number? (:date %))\n  :map #(re-find #\"c|Cartes\" (:domain %))\n  :french #(= (:language %) \"Français\")})\n \n(component inventory [data owner opts]\n  (render-state [_ state]\n    (html\n      (<div#inventory \n          (ref \"scroller\") \n          (draggable true)\n          (style {:position :absolute :overflow :hidden})\n          (onDragStart (fn [e] (do-drag-start e owner)))\n          (onDragEnd (fn [e] (do-drag-end e owner)))\n          (onDrag \n            (fn [e] \n              (let [[x y] (do-drag e owner)\n                    el (om/get-node owner \"scroller\")\n                    str-x (aget (.-style el) \"top\")\n                    el-x (if (= \"\" str-x) 0 (js/parseInt str-x))]\n                (aset (.-style el) \"top\" (str (+ el-x y) \"px\")))))\n        (into-array (map #(om/build listing % {}) \n          (sort-by (:date book-sorts)\n            (filter \n              (every-pred  \n                (:valid-date book-filters)\n                ;(:french book-filters)\n                ;(:map book-filters)\n                ;(complement (:french book-filters))\n                )\n            (vals (:inventory data))))))))))\n\n(component splash [data owner opts]\n  (render-state [_ state]\n    (html\n      (<div#splash \n          (onClick (fn [e] (om/transact! data [:splash :idx] inc)))\n          (into-array (map-indexed \n            #(<img (src %2)\n              (style {:opacity \n                (if (<= (- 5 %1) (:idx (:splash data)))\n                  0.0 1.0)}))\n            splash-moons))\n          (<h1 \"Cabinet Selenica\")\n          (<button \"inventory\"\n            (onClick #(om/update! data [:view] {:screen :inventory})))\n          (om/build searchbox data {}))\n        (om/build book-scroller data {}))))\n\n(def views {:splash splash :inventory inventory})\n\n(component main [data owner opts]\n  (render-state [_ state]\n    (html\n      (<div#main\n        (om/build (get views (:screen (:view data))) data {})))))\n\n\n \n(om/root main app-state\n  {:target (. js/document (getElementById \"app\"))})\n\n\n(defn on-js-reload []\n\n)\n\n\n(comment   \n(prn (identity (mapv (fn [[k v]] \n  [k (vec (remove nil? (map #(when-let [b (get v %1)] [%2 b]) \n    [:description :observations :notes :materials][-1 -2 -3 -4])))]) DATA/INVENTORY)))\n\n(prn (into {} \n  (mapv (fn [[k vs]]\n    [k (into {} \n      (map (juxt (comp {-1 :description -2 :observations -3 :notes -4 :materials} first)\n              last)\n       vs))]) \n    DATA/english)))\n)\n\n \n(defn ->edn [o] (transit/write (transit/writer :json) o))\n(defn edn-> [s] (transit/read (transit/reader :json) s))\n\n(def INV (atom nil))\n\n(declare parse-csv-cells float-str? int-str?)\n\n(defn parse-csv-cells [s] (map (comp #(string/trim %) #(string/replace % #\"[\\\"]\" \"\") first)  \n  (re-seq #\"([\\\"]([^\\\"]+)[\\\"])|,(,)|([^,\\\"]+)\" (string/replace s #\"\\\"\\\"\" \"'\"))))\n\n(defn parse-french-dimensions [s] \n  (mapv js/parseFloat (string/split (string/replace s #\",\" \".\") #\"\\W+x\\W+\" )))\n\n(defn remove-nil-kv [m]\n  (into {} (filter #(not (nil? (last %))) m)))\n\n(defn alter-inventory-kvs [m]\n    (if (string? (:dimensions m))\n      (update-in m [:dimensions] parse-french-dimensions)\n      m))\n \n(defn float-str? [s] (re-seq #\"^[1-9][0-9]*\\.[0-9]*$\" s))\n(defn int-str? [s] (re-seq #\"^[1-9][0-9]*$\" s))\n\n(defn cell-cast [s]\n  (cond (not (string? s)) s\n        (#{\",,\" \" \" \"\"} s) nil \n        (float-str? s) (js/parseFloat s)\n        (int-str? s) (js/parseInt s)\n        :else s))\n\n(defn parse-csv [buffer]\n  (let [rows (string/split buffer #\"\\n\")\n        schema (mapv keyword \n                (take-while #(not= \"\" %) \n                  (string/split (first rows) \",\")))\n        len (count schema)\n        data (map #(zipmap schema (map cell-cast (take len (parse-csv-cells %)))) (rest rows))\n        edn (into {} (map #(vector (:id %) (alter-inventory-kvs (remove-nil-kv %))) data))]\n        (prn edn)\n        edn\n        )) \n\n \n(comment \n(get-file \"./data/inventory.csv\" \n  #(do (reset! INV (parse-csv %))) \n  #(prn \"fail to load xls\"))\n\n\n(get-file \"./data/inventory.edn\" \n  #(do ;(prn (edn-> %))\n    ) \n  #(prn \"fail to load xls\"))\n\n\n  )",
 			"file": "src/selenica/core.cljs",
+			"file_size": 9385,
+			"file_write_time": 130916430478792000,
 			"settings":
 			{
-				"buffer_size": 3771,
+				"buffer_size": 9082,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "project.clj",
+			"contents": "\"photos/Delarue.jpg\"\n\"photos/Moon.jpg\"\n\"photos/Aldrin.jpg\"\n\"photos/map.jpg\"\n\"photos/Mond.jpg\"\n\"photos/Mondes.jpg\"\n\"photos/Selenographica.jpg\"\n\"photos/map.jpg\"\n\"photos/Mond.jpg\"\n\"photos/Hesperi.jpg\"\n\"photos/craters.jpg\"\n\"photos/crater.jpg\"\n\"photos/Astronomica.jpg\"\n\"photos/cover.jpg\"\n\"photos/p137.jpg\"\n\"photos/146.jpg\"\n\"photos/Dom.jpg\"\n\"photos/John.jpg\"\n\"photos/cover.jpg\"\n\"photos/Astro.jpg\"\n\"photos/1901.jpg\"\n\"photos/crater.jpg\"\n\"photos/Deseilligny.jpg\"\n\"photos/dir.txt\"\n\"photos/map.jpg\"\n\"photos/Celestis.jpg\"\n\"photos/Studies.jpg\"\n\"photos/1895.jpg\"\n\"photos/1889.jpg\"\n\"photos/1960.jpg\"\n\"photos/cover.jpg\"\n\"photos/cover.jpg\"\n\"photos/mond.jpg\"\n\"photos/crater.jpg\"\n\"photos/step.jpg\"\n\"photos/001.jpg\"\n\"photos/002.jpg\"\n\"photos/003.jpg\"\n\"photos/004.jpg\"\n\"photos/006.jpg\"\n\"photos/frontispisce.jpg\"\n\"photos/moon.jpg\"\n\"photos/1.jpg\"\n\"photos/Fontana.jpg\"\n\"photos/Nasa.jpg\"\n\"photos/002.jpg\"\n\"photos/003.jpg\"\n\"photos/004.jpg\"\n\"photos/descrip.jpg\"\n\"photos/invoice.jpg\"\n\"photos/Galilei.jpg\"\n\"photos/vendor.jpg\"\n\"photos/moons.jpg\"\n\"photos/1.jpg\"\n\"photos/2.jpg\"\n\"photos/Copernicus.jpg\"\n\"photos/Copernicus.jpg\"\n\"photos/copy.jpg\"\n\"photos/002.jpg\"\n\"photos/003.jpg\"\n\"photos/004.jpg\"\n\"photos/005.jpg\"\n\"photos/moon.jpg\"\n\"photos/Selenographia.jpg\"\n\"photos/Hevelius.jpg\"\n\"photos/arrival.jpg\"\n\"photos/MOON.jpg\"\n\"photos/moon.jpg\"\n\"photos/IX.jpg\"\n\"photos/cover.jpg\"\n\"photos/crater.jpg\"\n\"photos/1868.jpg\"\n\"photos/map.jpg\"\n\"photos/Introduction.jpg\"\n\"photos/moon.jpg\"\n\"photos/map.jpg\"\n\"photos/Orbiter.jpg\"\n\"photos/Orbiter.jpg\"\n\"photos/view.jpg\"\n\"photos/atlas.jpg\"\n\"photos/moon.jpg\"\n\"photos/moon.jpg\"\n\"photos/triest.jpg\"\n\"photos/moon.jpg\"\n\"photos/copy.jpg\"\n\"photos/lune.jpg\"\n\"photos/moon.jpg\"\n\"photos/frontispice.jpg\"\n\"photos/crater.jpg\"\n\"photos/4days.jpg\"\n\"photos/Observatory.jpg\"\n\"photos/moon.jpg\"\n\"photos/Weineck.jpg\"\n\"photos/Lune.jpg\"\n\"photos/map.jpg\"\n\"photos/mondcharte.jpg\"\n\"photos/map.jpg\"\n\"photos/Ubersichtskarte.jpg\"\n\"photos/moon.jpg\"\n\"photos/22.jpg\"\n\"photos/cover.jpg\"\n\"photos/Lab.jpg\"\n\"photos/cover.jpg\"\n\"photos/map.jpg\"\n\"photos/Nasa.jpg\"\n\"photos/Blagg.jpg\"\n\"photos/Blagg.jpg\"\n\"photos/zone.jpg\"\n\"photos/view.jpg\"\n\"photos/Orbiter.jpg\"\n\"photos/02.jpg\"\n\"photos/scale.jpg\"\n\"photos/Moon.jpg\"\n\"photos/Lune.jpg\"\n\"photos/plate.jpg\"\n\"photos/cover.jpg\"\n\"photos/Bobrovnikoff.jpg\"\n\"photos/cover.jpg\"\n\"photos/map.jpg\"\n\"photos/cover.jpg\"\n\"photos/Dossier.jpg\"\n\"photos/moon.jpg\"\n\"photos/considered.jpg\"\n\"photos/mond.jpg\"\n\"photos/map.jpg\"\n\"photos/moon.jpg\"\n\"photos/Crater.jpg\"\n\"photos/1.jpg\"\n\"photos/2.jpg\"\n\"photos/Moon.jpg\"\n\"photos/photo.jpg\"\n\"photos/lunaires.jpg\"\n\"photos/map.jpg\"\n\"photos/intro.jpg\"\n\"photos/1883.jpg\"\n\"photos/craters.jpg\"\n\"photos/Goodacre.jpg\"\n\"photos/lune.jpg\"\n\"photos/Chappell.jpg\"\n\"photos/Observatory.jpg\"\n\"photos/atlas.jpg\"\n\"photos/moon.jpg\"\n\"photos/moon.jpg\"\n\"photos/Moon.jpg\"\n\"photos/Doppelmayr.jpg\"\n\"photos/photo.jpg\"\n\"photos/P.jpg\"\n\"photos/Alphonsus.jpg\"\n\"photos/Chart.jpg\"\n\"photos/P.jpg\"\n\"photos/photo.jpg\"\n\"photos/1919.jpg\"\n\"photos/Atlas.jpg\"\n\"photos/Riccioli.jpg\"\n\"photos/Almagestum.jpg\"\n\"photos/map.jpg\"\n\"photos/Astronomie.jpg\"\n\"photos/photos.jpg\"\n\"photos/photograph.jpg\"\n\"photos/VALET.jpg\"\n\"photos/atlas.jpg\"\n\"photos/moon.jpg\"\n\"photos/Mondes.jpg\"\n\"photos/intro.jpg\"\n\"photos/mond.jpg\"\n\"photos/map.jpg\"\n\"photos/detail.jpg\"\n\"photos/1.jpg\"\n\"photos/fragmente.jpg\"\n\"photos/Valley.jpg\"\n\"photos/copy2.jpg\"\n\"photos/moon.jpg\"\n\"photos/page.jpg\"\n\"photos/sidereus.jpg\"\n\"photos/atlas.jpg\"\n\"photos/mosaic.jpg\"\n\"photos/5.jpg\"\n\"photos/drawings.jpg\"\n\"photos/portrait.jpg\"\n\"photos/map.jpg\"\n\"photos/cover.jpg\"\n\"photos/slide.jpg\"\n\"photos/slide.jpg\"\n\"photos/photograph.jpg\"\n\"photos/moon.jpg\"\n\"photos/mayeri.jpg\"\n\"photos/TWD_CABINET_CURIOSITES_6_045_001.jpg\"\n\"photos/photo.jpg\"\n\"photos/Atlas.jpg\"\n\"photos/Heaven.jpg\"\n\"photos/Moon.jpg\"\n\"photos/Moon.jpg\"\n\"photos/map.jpg\"\n\"photos/Guillemin.jpg\"\n\"photos/moon.jpg\"\n\"photos/astronomische.jpg\"\n\"photos/section.jpg\"\n\"photos/VII.jpg\"\n\"photos/cover.jpg\"\n\"photos/moon.jpg\"\n\"photos/moon.jpg\"\n\"photos/historica.jpg\"",
+			"file": "resources/public/img/photos/dir.txt",
+			"file_size": 14362,
+			"file_write_time": 130916492339728000,
 			"settings":
 			{
-				"buffer_size": 2732,
+				"buffer_size": 3924,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "resources/public/data/img-data.txt",
+			"settings":
+			{
+				"buffer_size": 5915,
+				"line_ending": "Windows",
+				"name": "\"72dpi/01.jpg\""
 			}
 		},
 		{
 			"file": "resources/public/css/style.css",
 			"settings":
 			{
-				"buffer_size": 693,
+				"buffer_size": 2443,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/selenica/macros.clj",
+			"file": "resources/public/data/inventory.csv",
 			"settings":
 			{
-				"buffer_size": 6917,
+				"buffer_size": 181482,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "Figwheel: Starting server at http://localhost:3449\nFocusing on build ids: dev\nCompiling \"resources/public/js/compiled/selenica.js\" from [\"src\"]...\nSuccessfully compiled \"resources/public/js/compiled/selenica.js\" in 0.31 seconds.\nStarted Figwheel autobuilder\n\nLaunching ClojureScript REPL for build: dev\nFigwheel Controls:\n          (stop-autobuild)                ;; stops Figwheel autobuilder\n          (start-autobuild [id ...])      ;; starts autobuilder focused on optional ids\n          (switch-to-build id ...)        ;; switches autobuilder to different build\n          (reset-autobuild)               ;; stops, cleans, and starts autobuilder\n          (reload-config)                 ;; reloads build config and resets autobuild\n          (build-once [id ...])           ;; builds source one time\n          (clean-builds [id ..])          ;; deletes compiled cljs target files\n          (fig-status)                    ;; displays current state of system\n          (add-dep [org.om/om \"0.8.1\"]) ;; add a dependency. very experimental\n  Switch REPL build focus:\n          :cljs/quit                      ;; allows you to switch REPL to another build\n    Docs: (doc function-name-here)\n    Exit: Control+C or :cljs/quit\n Results: Stored in vars *1, *2, *3, *e holds last exception object\nPrompt will show when figwheel connects to your application\nTo quit, type: :cljs/quit\ncljs.user=> ",
+			"file": "/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/SublimeREPL/config/ClojureScript/clojurescript.tmLanguage",
 			"settings":
 			{
-				"buffer_size": 1392,
+				"buffer_size": 602,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/SublimeREPL/config/ClojureScript/Main.sublime-menu",
+			"settings":
+			{
+				"buffer_size": 3343,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/selenica/data.cljs",
+			"settings":
+			{
+				"buffer_size": 185345,
+				"line_ending": "Windows",
+				"name": "{\"1791.1.2\" {:description \" papier verg� color�\","
+			}
+		},
+		{
+			"file": "project.clj",
+			"settings":
+			{
+				"buffer_size": 2898,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/SublimeREPL/config/ClojureScript/Default.sublime-commands",
+			"settings":
+			{
+				"buffer_size": 770,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Retrieving lein-cljsbuild/cljs-compat/1.0.0-SNAPSHOT/cljs-compat-1.0.0-20151101.091649-38.pom from clojars\nRetrieving lein-cljsbuild/cljs-compat/1.0.0-SNAPSHOT/cljs-compat-1.0.0-20151101.091649-38.jar from clojars\nFigwheel: Starting server at http://localhost:3449\nWARNING: sequence at line 1581 is being replaced at line 3196 file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs\nWARNING: rand at line 2017 is being replaced at line 8547 file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs\nWARNING: rand-int at line 2022 is being replaced at line 8553 file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs\nFocusing on build ids: dev\nCompiling \"resources/public/js/compiled/selenica.js\" from [\"src\"]...\nSuccessfully compiled \"resources/public/js/compiled/selenica.js\" in 1.125 seconds.\nWARNING: Use of undeclared Var cljs.core.async/do-alts at line 62 file:/C:/Users/jparker/.m2/repository/org/clojure/core.async/0.1.338.0-5c5012-alpha/core.async-0.1.338.0-5c5012-alpha.jar!/cljs/core/async/impl/ioc_helpers.cljs\nWARNING: Bad method signature in protocol implementation, impl/Handler does not declare method called lock-id at line 719 file:/C:/Users/jparker/.m2/repository/org/clojure/core.async/0.1.338.0-5c5012-alpha/core.async-0.1.338.0-5c5012-alpha.jar!/cljs/core/async.cljs\nWARNING: Use of undeclared Var cljs.core.async.impl.protocols/lock-id at line 722 file:/C:/Users/jparker/.m2/repository/org/clojure/core.async/0.1.338.0-5c5012-alpha/core.async-0.1.338.0-5c5012-alpha.jar!/cljs/core/async.cljs\nStarted Figwheel autobuilder\n\nLaunching ClojureScript REPL for build: dev\nFigwheel Controls:\n          (stop-autobuild)                ;; stops Figwheel autobuilder\n          (start-autobuild [id ...])      ;; starts autobuilder focused on optional ids\n          (switch-to-build id ...)        ;; switches autobuilder to different build\n          (reset-autobuild)               ;; stops, cleans, and starts autobuilder\n          (reload-config)                 ;; reloads build config and resets autobuild\n          (build-once [id ...])           ;; builds source one time\n          (clean-builds [id ..])          ;; deletes compiled cljs target files\n          (fig-status)                    ;; displays current state of system\n          (add-dep [org.om/om \"0.8.1\"]) ;; add a dependency. very experimental\n  Switch REPL build focus:\n          :cljs/quit                      ;; allows you to switch REPL to another build\n    Docs: (doc function-name-here)\n    Exit: Control+C or :cljs/quit\n Results: Stored in vars *1, *2, *3, *e holds last exception object\nPrompt will show when figwheel connects to your application\nTo quit, type: :cljs/quit\ncljs.user=> ",
+			"settings":
+			{
+				"buffer_size": 2856,
 				"line_ending": "Windows",
 				"name": "*REPL* [clojurescript]",
 				"scratch": true
@@ -57,16 +113,20 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 119.0,
-		"last_filter": "",
+		"height": 400.0,
+		"last_filter": "encod",
 		"selected_items":
 		[
+			[
+				"encod",
+				"HTML: Encode Special Characters"
+			],
 			[
 				"syntax: cloj",
 				"Set Syntax: ClojureScript"
 			]
 		],
-		"width": 400.0
+		"width": 472.0
 	},
 	"console":
 	{
@@ -119,11 +179,35 @@
 	"expanded_folders":
 	[
 		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/css",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/data",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/img",
 		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src",
-		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src/heh"
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src/dollar",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src/heh",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src/selenica"
 	],
 	"file_history":
 	[
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/img/72dpi/dir.txt",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/data/inventory.english.cljs",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/index.html",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/archiver/src/archiver/cloud.cljs",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src/heh/core.cljs",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/css/style.css",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/data/inventory.edn",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/data/inventory.csv",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/js/xls.js",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src/selenica/macros.clj",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/.gitignore",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/final/src/fast/util.cljs",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/final/src/fast/element.cljs",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/final/src/fast/core.cljs",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/final/production/js/init.js",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/project.clj",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/final/project.clj",
 		"/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/User/paredit.sublime-settings",
 		"/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
 		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/final/src/comp/outliner.cljs",
@@ -132,7 +216,7 @@
 	],
 	"find":
 	{
-		"height": 38.0
+		"height": 39.0
 	},
 	"find_in_files":
 	{
@@ -146,11 +230,46 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"(\\w+[\\.]\\w+)",
+			"Cartes et plans",
+			"\\[ ",
+			"\\/",
+			"\\[\\\" [^\\\"\\ ]+",
+			"\\] \\[-(1|2|3|4|4)",
+			"\\[-( 1| 2| 3| 4| 4)",
+			"\\[-( 1| 2| 3|4| 4)\\\"",
+			"\\[-(1|2|3|4| 4)\\\"",
+			"\\[-(1|2|3|4| 4)",
+			"\\[\\[-(1|2|3|4|5)",
+			"\\] \\[-(1|2|3)",
+			"\\[-(1|2|3)",
+			"\\]\\]\\] ",
+			"\\[\\[",
+			":[^\\\"\\W]+(\\\")",
+			"\":",
+			": ",
+			"\": ",
+			"5em",
+			"},",
+			"}",
+			"} ",
+			", :",
+			"}, ",
+			"},  ",
+			"} ",
+			"}",
+			"\"",
+			"Londres",
+			", :",
+			"58",
+			"inline",
+			"writerreader",
+			"writer"
 		],
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": false,
+		"regex": true,
 		"replace_history":
 		[
 		],
@@ -172,15 +291,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3771,
+						"buffer_size": 9082,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								584,
-								584
+								5134,
+								5134
 							]
 						],
 						"settings":
@@ -190,7 +309,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2422.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -198,19 +317,228 @@
 				},
 				{
 					"buffer": 1,
-					"file": "project.clj",
+					"file": "resources/public/img/photos/dir.txt",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2732,
+						"buffer_size": 3924,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								424,
-								424
+								0,
+								3924
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 585.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "resources/public/data/img-data.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5915,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3592,
+								3592
+							]
+						],
+						"settings":
+						{
+							"auto_name": "\"72dpi/01.jpg\"",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 3067.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "resources/public/css/style.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2443,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								405,
+								405
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "resources/public/data/inventory.csv",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 181482,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7849,
+								7849
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1125.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/SublimeREPL/config/ClojureScript/clojurescript.tmLanguage",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 602,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/XML/XML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/SublimeREPL/config/ClojureScript/Main.sublime-menu",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3343,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1222,
+								201
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 45.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/selenica/data.cljs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 185345,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								157134,
+								157135
+							]
+						],
+						"settings":
+						{
+							"auto_name": "{\"1791.1.2\" {:description \" papier verg� color�\",",
+							"syntax": "Packages/SublimeREPL/config/ClojureScript/clojurescript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 2536.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 8,
+					"file": "project.clj",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2898,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								554,
+								554
 							]
 						],
 						"settings":
@@ -220,91 +548,56 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "resources/public/css/style.css",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 693,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1,
-								1
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/CSS/CSS.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 14.0,
+						"translation.y": 135.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "src/selenica/macros.clj",
+					"buffer": 9,
+					"file": "/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/SublimeREPL/config/ClojureScript/Default.sublime-commands",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6917,
+						"buffer_size": 770,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								22,
-								22
+								264,
+								2
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Arcadia/Arcadia.tmlanguage",
-							"tab_size": 2,
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 6,
 					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 0,
-			"sheets":
-			[
+				},
 				{
-					"buffer": 4,
+					"buffer": 10,
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1392,
+						"buffer_size": 2856,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1392,
-								1392
+								2856,
+								2856
 							]
 						],
 						"settings":
@@ -318,7 +611,7 @@
 							"line_numbers": false,
 							"repl": true,
 							"repl_external_id": "clojurescript",
-							"repl_id": "a726d862ea484c4bbbbefbb845dbecdf",
+							"repl_id": "12995d9a79ed40f0893a77c0e14fd540",
 							"repl_restart_args":
 							{
 								"cmd":
@@ -362,10 +655,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 315.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 3,
 					"type": "text"
 				}
 			]
@@ -404,7 +697,7 @@
 		"rows":
 		[
 			0.0,
-			0.812900274474,
+			0.888739498859,
 			1.0
 		]
 	},
@@ -455,7 +748,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 166.0,
+	"side_bar_width": 181.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

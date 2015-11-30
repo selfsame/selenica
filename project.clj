@@ -11,7 +11,8 @@
                  [org.clojure/core.logic "0.8.9"]
                  [cljsjs/react "0.13.3-0"]
                  [org.omcljs/om "0.8.8"]
-                 [com.cognitect/transit-cljs "0.8.220"]]
+                 [com.cognitect/transit-cljs "0.8.220"]
+                 [selfsame/dollar "0.0.9-SNAPSHOT"]]
 
   :plugins [[lein-cljsbuild "1.0.5"]
             [lein-figwheel "0.3.5"]]

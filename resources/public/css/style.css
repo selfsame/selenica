@@ -162,3 +162,30 @@ div.listing .details span.english{
 div.listing .details span.french{
 	font-style:italic;
 }
+
+
+div.listing img{
+	max-height:500px;
+	float:left;
+}
+
+div.editing label{
+	float:left;
+	width:50%;
+	margin-bottom: 0.5em;
+}
+div.editing label span{
+	vertical-align: top;
+	margin:0em 1em;
+}
+
+div.editing label textarea, div.editing label input{
+	float:right;
+	width:70%;
+}
+
+div.editing label textarea{
+	height:200px;
+	display:block;
+	width:95%;
+}
