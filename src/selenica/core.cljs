@@ -88,10 +88,6 @@
 
 (def drag-cursor (make-img "img/dragcursor.png"))
 
-(component searchbox [data owner opts]
-  (render-state [_ state]
-    (html (<label "search" (<input)))))
-
 (defn do-drag-start [e owner]
   (let [[x y] [(.-clientX e)(.-clientY e)]]
     (.setDragImage (.-dataTransfer e) drag-cursor 16 16)
@@ -119,35 +115,6 @@
     (inject-css "force" "")
     (.stopPropagation e)))
 
-
-
-(component book-scroller [data owner opts]
-  (render-state [_ state]
-    (html
-      (<div.footer
-        (<div.scroller.horizontal
-          (ref "scroller") 
-          (draggable true)
-          (onDragStart (fn [e] (do-drag-start e owner)))
-          (onDragEnd (fn [e] (do-drag-end e owner)))
-          (onDrag 
-            (fn [e] 
-              (let [[x y] (do-drag e owner)
-                    el (om/get-node owner "scroller")
-                    str-x (aget (.-style el) "left")
-                    el-x (if (= "" str-x) 0 (js/parseInt str-x))]
-                (aset (.-style el) "left" (str (+ el-x x) "px")))))
-          (into-array (map 
-            #(<div.book 
-              (style {
-                :background (:color %) 
-                :left (:left %)
-                :width (:width %)
-                :height (:height %) }))
-            books)))))))
-
-;(:description :date :publisher :observations :dimensions :title :author :language :id 
-;  :condition :notes :materials :provenance :domain :id-prov :links)
 
 (component vec-editor [data owner opts]
   (render-state [_ state]
@@ -185,6 +152,16 @@
                         (<textarea (value (str v)))))))
             (sort-by #({:short -1 :long 5} 
               (get schema (first %))) data)))))))
+
+(def book-sorts {
+  :date #(if (string? (:date %)) 9999999 (:date %))
+  :biggest #(if (and (vector? (:dimensions %)) (> 1 (count (:dimensions %)))) 
+                (let [[w h] (:dimensions %)] (* w h)))})
+
+(def book-filters {
+  :valid-date #(number? (:date %))
+  :map #(re-find #"c|Cartes" (:domain %))
+  :french #(= (:language %) "Français")})
 
 (component listing [data owner opts]
   (render-state [_ state]
@@ -224,16 +201,11 @@
                       (or english french)))))
               ['description 'publisher 'observations 'notes 'materials 'provenance 'links]))))))))
    
-(def book-sorts {
-  :date #(if (string? (:date %)) 9999999 (:date %))
-  :biggest #(if (and (vector? (:dimensions %)) (> 1 (count (:dimensions %)))) 
-                (let [[w h] (:dimensions %)] (* w h)))})
 
-(def book-filters {
-  :valid-date #(number? (:date %))
-  :map #(re-find #"c|Cartes" (:domain %))
-  :french #(= (:language %) "Français")})
- 
+(component searchbox [data owner opts]
+  (render-state [_ state]
+    (html (<label "search" (<input)))))
+
 (component inventory [data owner opts]
   (render-state [_ state]
     (html
@@ -265,18 +237,10 @@
   (render-state [_ state]
     (html
       (<div#splash 
-          (onClick (fn [e] (om/transact! data [:splash :idx] inc)))
-          (into-array (map-indexed 
-            #(<img (src %2)
-              (style {:opacity 
-                (if (<= (- 5 %1) (:idx (:splash data)))
-                  0.0 1.0)}))
-            splash-moons))
           (<h1 "Cabinet Selenica")
           (<button "inventory"
             (onClick #(om/update! data [:view] {:screen :inventory})))
-          (om/build searchbox data {}))
-        (om/build book-scroller data {}))))
+          (om/build searchbox data {})))))
 
 (def views {:splash splash :inventory inventory})
 
@@ -292,81 +256,4 @@
   {:target (. js/document (getElementById "app"))})
 
 
-(defn on-js-reload []
-
-)
-
-
-(comment   
-(prn (identity (mapv (fn [[k v]] 
-  [k (vec (remove nil? (map #(when-let [b (get v %1)] [%2 b]) 
-    [:description :observations :notes :materials][-1 -2 -3 -4])))]) DATA/INVENTORY)))
-
-(prn (into {} 
-  (mapv (fn [[k vs]]
-    [k (into {} 
-      (map (juxt (comp {-1 :description -2 :observations -3 :notes -4 :materials} first)
-              last)
-       vs))]) 
-    DATA/english)))
-)
-
- 
-
-
-
-
-(def INV (atom nil))
-
-(declare parse-csv-cells float-str? int-str?)
-
-(defn parse-csv-cells [s] (map (comp #(string/trim %) #(string/replace % #"[\"]" "") first)  
-  (re-seq #"([\"]([^\"]+)[\"])|,(,)|([^,\"]+)" (string/replace s #"\"\"" "'"))))
-
-(defn parse-french-dimensions [s] 
-  (mapv js/parseFloat (string/split (string/replace s #"," ".") #"\W+x\W+" )))
-
-(defn remove-nil-kv [m]
-  (into {} (filter #(not (nil? (last %))) m)))
-
-(defn alter-inventory-kvs [m]
-    (if (string? (:dimensions m))
-      (update-in m [:dimensions] parse-french-dimensions)
-      m))
- 
-(defn float-str? [s] (re-seq #"^[1-9][0-9]*\.[0-9]*$" s))
-(defn int-str? [s] (re-seq #"^[1-9][0-9]*$" s))
-
-(defn cell-cast [s]
-  (cond (not (string? s)) s
-        (#{",," " " ""} s) nil 
-        (float-str? s) (js/parseFloat s)
-        (int-str? s) (js/parseInt s)
-        :else s))
-
-(defn parse-csv [buffer]
-  (let [rows (string/split buffer #"\n")
-        schema (mapv keyword 
-                (take-while #(not= "" %) 
-                  (string/split (first rows) ",")))
-        len (count schema)
-        data (map #(zipmap schema (map cell-cast (take len (parse-csv-cells %)))) (rest rows))
-        edn (into {} (map #(vector (:id %) (alter-inventory-kvs (remove-nil-kv %))) data))]
-        (prn edn)
-        edn
-        )) 
-
- 
-(comment 
-(get-file "./data/inventory.csv" 
-  #(do (reset! INV (parse-csv %))) 
-  #(prn "fail to load xls"))
-
-
-(get-file "./data/inventory.edn" 
-  #(do ;(prn (edn-> %))
-    ) 
-  #(prn "fail to load xls"))
-
-
-  )
+(defn on-js-reload [])
