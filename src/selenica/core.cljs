@@ -136,6 +136,13 @@
   (render-state [_ state]
     (html
       (<div.editing
+        (<hr)
+          (<span 
+            (<button "save"
+              (onClick #(om/update-state! owner :editing not)))
+            (<button "discard"
+              (onClick #(om/update-state! owner :editing not))))
+          (<hr)
           (into-array (map 
             (fn [[k v]]
               (let [scheme (get schema k)
@@ -174,21 +181,18 @@
             (<span.form (str (:domain data) " - " (:language data)))
             (<span.dimensions 
               (prn-str (:dimensions data)))
-            (if (:editing state)
-              (<span 
-                (<button "save"
-                  (onClick #(om/update-state! owner :editing not)))
-                (<button "discard"
-                  (onClick #(om/update-state! owner :editing not))))
-              (<span
-                (<button "edit"
-                  (onClick #(om/update-state! owner :editing not)))))
+            
+            (<button "edit"
+              (onClick #(om/update-state! owner :editing not)))
             (<span.condition (:condition data) (class (:condition data) ))
             (<span.id (:id data)))
           (<div.nouns 
             (<span.title (:title data))
             (<span.author (:author data))
-            (<img (src (str "img/" (rand-nth DATA/IMAGES)))))
+            (<span.images 
+              (into-array 
+                (map #(<img (src (str "img/" %)))
+                  (:images data)))))
 
           (<div.details 
             (into-array (map
