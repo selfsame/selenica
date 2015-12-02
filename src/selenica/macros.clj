@@ -75,3 +75,5 @@
       ~col)))))
 
 
+(defmacro log [& junk] 
+  `(~'.log ~'js/console ~@junk))

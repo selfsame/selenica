@@ -13,7 +13,7 @@
 
 (defn owner-key [owner] 
   (try 
-    (.. owner -_currentElement -_rootNodeID)
+    (.. owner -_reactInternalInstance -_instance -_rootNodeID)
     (catch js/Error e 
       (.log js/console owner ))))
 

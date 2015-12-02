@@ -1,9 +1,10 @@
 (ns ^:figwheel-always selenica.core
   (:require-macros
-    [selenica.macros :refer [mapf ? ..! each]]
+    [selenica.macros :refer [mapf ? ..! each log]]
     [heh.core :refer [html component]])
   (:require
     [clojure.string :as string]
+    [cljs.pprint]
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true]
     [heh.core :refer [private private! emit! down!]]
@@ -18,13 +19,26 @@
 (defn put-local [k v] (.setItem js/localStorage k v))
 (defn get-local [k] (.getItem js/localStorage k ))
 
+(defn vec-dissoc [col & idxs]
+  (vec (for [i (range (count col)) :when (not ((set idxs) i))] (get col i))))
+
+(defn valid-idx [col n] (min (max 0 n) (dec (count col))))
+
+(defn vec-move [col idx offset]
+  (let [v (get col idx)
+        res (vec-dissoc col idx)
+        target (valid-idx col (+ idx offset))]
+    (vec (concat (subvec res 0 target) [v] (subvec res target (count res))))))
+
+
+
 (defn inject-css [id s]
   (let [el (or (first ($ (str "#" id)))
                (first ($ (str "<style id='" id "'></style>"))))]
     (aset el "innerHTML" s)
     (.appendChild (first ($ "head")) el)))
 
- 
+
 (defn get-file [url f fail]
   (when-let [req (new js/XMLHttpRequest)]
     (set! (.-onreadystatechange req)
@@ -35,9 +49,9 @@
             (when fail (fail e))))))
     (.open req "GET" url false)
     (.overrideMimeType req "text/xml; charset=iso-8859-1")
-    ;(set! (.-responseType req) "arraybuffer")
+    #_ (set! (.-responseType req) "arraybuffer")
     (.send req)))
-
+ 
 (def schema { 
   :description  :long
   :date         :integer
@@ -56,30 +70,20 @@
   :images       {:vector true :form :short}
   })
  
- 
+
+
 (defonce  app-state (atom 
 {:splash {:idx 0}
  :context []
  :touch {:velocity [0 0]}
  :view {:screen :splash}
- :inventory (edn-> (get-local "inventory")) ;DATA/INVENTORY
-
+ :inventory #_ DATA/INVENTORY (edn-> (get-local "inventory")) 
+ :editing {:id nil}
   }))
+
+(defn root-ref [& more]
+  (om/ref-cursor (get-in (om/root-cursor app-state) more)))
  
-(def splash-moons
-  (for [f (identity ["001" "002" "003" "004" "005"])]
-    (str "img/splash/" f ".png")))
-
-(def books
-   (reverse (reduce 
-  #(cons (assoc %2 :left 
-      (+ 5 (:left (first %1)) (:width (first %1)))) %1) 
-  (for [i (range 80)]
-    {:width (+ 15 (rand-int 20)) 
-      :height (+ 105 (rand-int 20)) 
-     :color (rand-nth ["brown" "tomato" "purple" "gray" "blue"])}))))
-
-
 
 (defn make-img [path]
   (let [img (.createElement js/document "img")]
@@ -118,20 +122,26 @@
 
 (component vec-editor [data owner opts]
   (render-state [_ state]
-    (let [scheme (get schema opts)]
+    (let [scheme (:schema opts)]
     (html
       (<div.vector
-        (if (vector? (:form scheme))
-          (<button "+"
-            (onClick (fn [_] (om/transact! data #(conj % ""))))))
-        (<hr)
-          (into-array (map 
-            (fn [v]
-              (let []
-                (<input (value (str v)))))
-            data)))))))
+        (if-not (vector? (:form scheme))
+          (<button.new-field "+" (onClick (fn [_] (om/transact! data #(conj % ""))))))
+          (into-array (map-indexed
+            (fn [i v]
+              (<div
+                (when-not (vector? (:form scheme))
+                  (<span 
+                    (<button "-" (onClick (fn [_] (om/transact! data #(vec-dissoc % i)))))
+                    (<button "^" (onClick (fn [_] (om/transact! data #(vec-move % i -1)))))
+                    (<button "v" (onClick (fn [_] (om/transact! data #(vec-move % i 1)))))))
+                (<input 
+                  (value (str v))
+                  (onChange #())
+                  (onBlur (fn [e] (om/transact! data [i] #(str (.. e -target -value))))))))
+            data))
+        (<hr))))))
  
-
 (component listing-editor [data owner opts]
   (render-state [_ state]
     (html
@@ -139,24 +149,30 @@
         (<hr)
           (<span 
             (<button "save"
-              (onClick #(om/update-state! owner :editing not)))
+              (onClick #(do 
+                (om/transact! (root-ref :editing) (fn [o] (dissoc o :id)))
+                (put-local "inventory" (->edn @(root-ref :inventory))) )))
             (<button "discard"
               (onClick #(om/update-state! owner :editing not))))
           (<hr)
           (into-array (map 
             (fn [[k v]]
               (let [scheme (get schema k)
-                    key-str (.-name k)]
-                (<label 
-                  (ref key-str)
-                  (class (str key-str)) 
-                  key-str
+                    key-str (.-name k)
+                    small-field? (#{:short :number :integer} scheme)]
+                (<label key-str
+                  (class (str key-str (if small-field? " small"))) 
                   (cond (:vector scheme)
                         (om/build vec-editor (get data k) {:opts {:schema scheme}})
-                        (#{:short :number :integer} scheme)
-                        (<input (value (str v)))
+                        small-field?
+                        (<input 
+                          (value (str v))
+                          (onChange (fn [e] ))
+                          (onBlur (fn [e] (om/transact! data [k] #(str (.. e -target -value))))))
                         (#{:long} scheme)
-                        (<textarea (value (str v)))))))
+                        (<textarea (value (str v))
+                          (onChange (fn [e] ))
+                          (onBlur (fn [e] (om/transact! data [k] #(str (.. e -target -value))))))))))
             (sort-by #({:short -1 :long 5} 
               (get schema (first %))) data)))))))
 
@@ -173,37 +189,48 @@
 (component listing [data owner opts]
   (render-state [_ state]
     (html
-      (if (:editing state) 
-        (om/build listing-editor data {})
-        (<div.listing
-          (<div.meta 
-            (<span.date (:date data))
-            (<span.form (str (:domain data) " - " (:language data)))
-            (<span.dimensions 
-              (prn-str (:dimensions data)))
-            
+      (<div.listing
+        (<div.meta 
+          (<span.date (:date data))
+          (<span.form (str (:domain data) " - " (:language data)))
+          (<span.dimensions 
+            (prn-str (:dimensions data)))
+          (when-not (= (:id (root-ref :editing)) (str (:id data)))
             (<button "edit"
-              (onClick #(om/update-state! owner :editing not)))
-            (<span.condition (:condition data) (class (:condition data) ))
-            (<span.id (:id data)))
-          (<div.nouns 
-            (<span.title (:title data))
-            (<span.author (:author data))
-            (<span.images 
-              (into-array 
-                (map #(<img (src (str "img/" %)))
-                  (:images data)))))
+              (onClick 
+                (fn [_]
+                  (if-let [entry (get (root-ref :inventory) (str (:id data)))]
+                    (om/transact! (root-ref :editing) [:id] (fn [_] (str (:id data))))
+                    (prn "no entry"))))))
+          (<span.condition (:condition data) (class (:condition data) ))
+          (<span.id (:id data)))
+        (<div.layout
+        (<span.title (:title data))
 
-          (<div.details 
-            (into-array (map
-              #(let [
-                english (get-in DATA/english [(:id data) (keyword %)])
-                french (get data (keyword %))]
-                (when (or english french)
-                  (<div (<label (str % ": ")) 
-                    (<span (class (if english "english" "french")) 
-                      (or english french)))))
-              ['description 'publisher 'observations 'notes 'materials 'provenance 'links]))))))))
+        (<div.details 
+          
+          (<span.author (:author data))
+          (into-array (map
+            #(let [
+              english (get-in DATA/english [(:id data) (keyword %)])
+              french (get data (keyword %))]
+              (when (or english french)
+                (<div (<label (str % ": ")) 
+                  (<span (class (if english "english" "french")) 
+                    (or english french)))))
+            ['description 'publisher 'observations 'notes 'materials 'provenance 'links])))
+        
+          (if-let [s (get (:images data) (or (:selected-img state) 0))]
+            (<img.showcase (src (str "img/" s))))
+
+        (<div.images 
+            (into-array 
+              (map-indexed 
+                (fn [i s] 
+                  (<img (src (str "img/" s))
+                    (class (if (= (or (:selected-img state) 0) i) "selected" ""))
+                    (onClick #(om/set-state! owner :selected-img i))))
+                (:images data)))))))))
    
 
 (component searchbox [data owner opts]
@@ -226,16 +253,16 @@
                     str-x (aget (.-style el) "top")
                     el-x (if (= "" str-x) 0 (js/parseInt str-x))]
                 (aset (.-style el) "top" (str (+ el-x y) "px")))))
-        (into-array (map #(om/build listing % {}) 
-          (sort-by (:date book-sorts)
+        (into-array (map #(om/build listing (last %) {:opts {:K (first %)}}) 
+          (sort-by #((:date book-sorts) (last %))
             (filter 
-              (every-pred  
+              (comp (every-pred  
                 (:valid-date book-filters)
-                ;(:french book-filters)
-                ;(:map book-filters)
-                ;(complement (:french book-filters))
-                )
-            (vals (:inventory data))))))))))
+                #_(:french book-filters)
+                #_(:map book-filters)
+                #_(complement (:french book-filters))
+                ) last)
+            (:inventory data)))))))))
 
 (component splash [data owner opts]
   (render-state [_ state]
@@ -252,7 +279,10 @@
   (render-state [_ state]
     (html
       (<div#main
-        (om/build (get views (:screen (:view data))) data {})))))
+        (om/build (get views (:screen (:view data))) data {})
+        (if (:id (:editing data)) 
+          (<div.two-panel (om/build listing (get (:inventory data) (:id (:editing data))) {})
+                (om/build listing-editor (get (:inventory data) (:id (:editing data))) {})))))))
 
 
  
@@ -261,3 +291,14 @@
 
 
 (defn on-js-reload [])
+
+(comment 
+(def fixed (atom nil))
+(do 
+(put-local "inventory" (->edn 
+  (into {} 
+    (mapv (fn [[k v]] [(str (:id v)) v])
+    DATA/INVENTORY))))
+true)
+)
+

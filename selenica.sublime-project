@@ -3,6 +3,9 @@
 	[
 		{
 			"path": "."
+		},
+		{
+			"path": "C:\\Users\\jparker\\AppData\\Roaming\\Sublime Text 3\\Packages\\arcadia-repl"
 		}
 	]
 }
