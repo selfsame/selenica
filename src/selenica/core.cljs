@@ -285,20 +285,66 @@
                 (om/build listing-editor (get (:inventory data) (:id (:editing data))) {})))))))
 
 
- 
-(om/root main app-state
+
+#_(om/root main app-state
   {:target (. js/document (getElementById "app"))})
 
 
-(defn on-js-reload [])
 
-(comment 
-(def fixed (atom nil))
-(do 
-(put-local "inventory" (->edn 
-  (into {} 
-    (mapv (fn [[k v]] [(str (:id v)) v])
-    DATA/INVENTORY))))
-true)
-)
+(inject-css "ipfs"
+  "body{
+    background: rgb(70, 70, 70);
+  }
+    span.ipfs{
+    padding: .2em .2em .2em .2em;
+    margin:0.2em;
+    text-align:left;
+    height: 1em;
+    line-height: 1em;
+    overflow: hidden;
+    display: inline-block;
+    border-radius: 3px;
+    font-family: 'Consolas', courier, mono-spaced;
+    font-size:0.8em;
+  }")
+
+
+
+
+(def IPFS (atom {:hashes [
+  "qms2hjwx8qejwm4nmwu7ze6ndam2sfums3x6idwz5myzbn"
+  "qmv8ndh7ageh9b24zngaextmuhj7aiuw3scc8hkczvjkww" 
+  "qmuvjja4s4cgyqyppozttssquvgcv2n2v8mae3gnkrxmol" 
+  "qmrgjmlhlddhvxuieveuuwkeci4ygx8z7ujunikzpfzjuk" 
+  "qmrolalcquyo5vu5v8bvqmgjcpzow16wukq3s3vrll2tdk" 
+  "qmwk51jygpchgwr3srdnmhyerheqd22qw3vvyamb3emhuw"
+  "QmSrCRJmzE4zE1nAfWPbzVfanKQNBhp7ZWmMnEdbiLvYNh"
+  "QmQwAP9vFjbCtKvD8RkJdCvPHqLQjZfW7Mqbbqx18zd8j7"
+  "QmTkzDwWqPbnAh5YiV5VwcTLnGdwSNsNTn2aDxdXBFca7D"]}))
+
+(def ipfs-pattern #"[a-zA-Z0-9]{46}")
+
+(component ipfs [data owner opts]
+  (render-state [_ state]
+    (let [[a b] (mapv (comp #(.toString % 16) #(.abs js/Math %) hash) 
+                      (re-seq #"[a-zA-Z0-9]{23}" (:value data)))]
+    (html
+      (<span.ipfs
+      (style {:background-color (str "#" (apply str (take 6 a)))
+        :color "black"
+        :border-left "1.5em solid" 
+        :border-color (str "#" (apply str (take 6 b)))
+              }) 
+      (str b))))))
+
+(component ipfs-app [data owner opts]
+  (render-state [_ state]
+    (html
+      (<div (into-array
+        (map #(om/build ipfs {:value %} {})
+          (:hashes data)))))))
+
+(om/root ipfs-app IPFS
+  {:target (. js/document (getElementById "app"))})
+
 

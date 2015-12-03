@@ -11,33 +11,41 @@
 			"file": "src/selenica/core.cljs",
 			"settings":
 			{
-				"buffer_size": 8719,
+				"buffer_size": 10135,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "project.clj",
+			"file": "/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/arcadia-repl/clojure-dark.YAML-tmTheme",
 			"settings":
 			{
-				"buffer_size": 2950,
+				"buffer_size": 5712,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/arcadia-repl/test.cljs",
+			"file": "resources/public/css/style.css",
 			"settings":
 			{
-				"buffer_size": 5148,
+				"buffer_size": 4217,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": ">\n\nhard.core> \n:InvalidOperationException\n\"Unable to resolve symbol: > in this context\"\nclojure.lang.Compiler.ResolveIn\n  (clojure.lang.Namespace n, clojure.lang.Symbol symbol, Boolean allowPrivate) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.Resolve\n  (clojure.lang.Symbol symbol) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.AnalyzeSymbol\n  (clojure.lang.Symbol symbol) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.Analyze\n  (clojure.lang.CljCompiler.Ast.ParserContext pcontext, System.Object form, System.String name) [0x00000]\n  <filename unknown>:0 , compiling:\n  (NO_SOURCE_PATH:0:0)\nhard.core=> \n:InvalidOperationException\n\"Unable to resolve symbol:  in this context\"\nclojure.lang.Compiler.ResolveIn\n  (clojure.lang.Namespace n, clojure.lang.Symbol symbol, Boolean allowPrivate) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.Resolve\n  (clojure.lang.Symbol symbol) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.AnalyzeSymbol\n  (clojure.lang.Symbol symbol) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.Analyze\n  (clojure.lang.CljCompiler.Ast.ParserContext pcontext, System.Object form, System.String name) [0x00000]\n  <filename unknown>:0 , compiling:\n  (NO_SOURCE_PATH:0:0)\nhard.core=> U+0007\n:InvalidOperationException\n\"Unable to resolve symbol: U+0007 in this context\"\nclojure.lang.Compiler.ResolveIn\n  (clojure.lang.Namespace n, clojure.lang.Symbol symbol, Boolean allowPrivate) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.Resolve\n  (clojure.lang.Symbol symbol) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.AnalyzeSymbol\n  (clojure.lang.Symbol symbol) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.Analyze\n  (clojure.lang.CljCompiler.Ast.ParserContext pcontext, System.Object form, System.String name) [0x00000]\n  <filename unknown>:0 , compiling:\n  (NO_SOURCE_PATH:0:0)\nhard.core=> \n\nhard.core=> \n\nhard.core=> (def subscript {0 '₀ 1 '₁ 2 '₂ 3 '₃ 4 '₄ 5 '₅ 6 '₆ 7 '₇ 8 '₈ 9 '₉ '+ '₊ '- '₋ '= '₌ :open '₍ :close '₎})\n#'hard.core/subscript\n\nhard.core=> (defn sub-int [n] (map (comp int str) (seq (str (int n)))))\n:InvalidOperationException\n\"Unable to resolve symbol: defn in this context\"\nclojure.lang.Compiler.ResolveIn\n  (clojure.lang.Namespace n, clojure.lang.Symbol symbol, Boolean allowPrivate) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.Resolve\n  (clojure.lang.Symbol symbol) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.AnalyzeSymbol\n  (clojure.lang.Symbol symbol) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.Analyze\n  (clojure.lang.CljCompiler.Ast.ParserContext pcontext, System.Object form, System.String name) [0x00000]\n  <filename unknown>:0 , compiling:\n  (NO_SOURCE_PATH:0:0)\nhard.core=> (in-ns 'user)\n#<Namespace user>\n\nuser=> (defn sub-int [n] (map (comp #(get subscript %) int str) (seq (str (int n)))))\n#'user/sub-int\n\nuser=> (def subscript {0 '₀ 1 '₁ 2 '₂ 3 '₃ 4 '₄ 5 '₅ 6 '₆ 7 '₇ 8 '₈ 9 '₉ '+ '₊ '- '₋ '= '₌ :open '₍ :close '₎})\n#'user/subscript\n\nuser=> (sub-int 687)\n(6 8 7)\n\nuser=> (defn sub-int [n] (map (comp #(get subscript %) int str) (seq (str (int n)))))\n7\n\nuser=> (defn sub-int [n] (map (comp #(get subscript %) int str) (seq (str (int n)))))\n#'user/sub-int\n\nuser=> (sub-int 687)\n(₆ ₈ ₇)\n\nuser=> \n\nuser=> (defn sub-int [n] (map (comp #(apply str %) #(get subscript %) int str) (seq (str (int n)))))\n#'user/sub-int\n\nuser=> \n\nuser=> (defn sub-int [n] (map (comp #(apply str %) #(get subscript %) int str) (seq (str (int n)))))\n:InvalidOperationException\n\"Unable to resolve symbol: ub-int in this context\"\nclojure.lang.Compiler.ResolveIn\n  (clojure.lang.Namespace n, clojure.lang.Symbol symbol, Boolean allowPrivate) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.Resolve\n  (clojure.lang.Symbol symbol) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.AnalyzeSymbol\n  (clojure.lang.Symbol symbol) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.Analyze\n  (clojure.lang.CljCompiler.Ast.ParserContext pcontext, System.Object form, System.String name) [0x00000]\n  <filename unknown>:0 , compiling:\n  (NO_SOURCE_PATH:0:0)\nuser=> (defn sub-int [n] (map (comp #(str %) #(get subscript %) int str) (seq (str (int n)))))\n#'user/sub-int\n\nuser=> (defn sub-int [n] (map (comp #(str %) #(get subscript %) int str) (seq (str (int n)))))\n#<user$sub_int__22275 user$sub_int__22275>\n\nuser=> \n\nuser=> (defn sub-int [n] (map (comp str #(get subscript %) int str) (seq (str (int n)))))\n#'user/sub-int\n\nuser=> (sub-int 687)\n(\"₆\" \"₈\" \"₇\")\n\nuser=> (defn sub-int [n] (apply str (map (comp #(get subscript %) int str) (seq (str (int n))))))\n#'user/sub-int\n\nuser=> (sub-int 687)\n\"₆₈₇\"\n\nuser=> (defn sub-int [n] (symbol (apply str (map (comp #(get subscript %) #(concat [:open] % [:close]) int str) (seq (str (int n)))))))\n#'user/sub-int\n\nuser=> (sub-int 687)\n₆₈₇\n\nuser=> \n(defn sub-int [n] \n  (symbol (apply str \n    (map (comp \n      #(get subscript %) \n      #(concat [:open] % [:close]) \n      int \n      str) \n    (seq (str (int n)))))))\n:InvalidOperationException\n\"Unable to resolve symbol: => in this context\"\nclojure.lang.Compiler.ResolveIn\n  (clojure.lang.Namespace n, clojure.lang.Symbol symbol, Boolean allowPrivate) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.Resolve\n  (clojure.lang.Symbol symbol) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.AnalyzeSymbol\n  (clojure.lang.Symbol symbol) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.Analyze\n  (clojure.lang.CljCompiler.Ast.ParserContext pcontext, System.Object form, System.String name) [0x00000]\n  <filename unknown>:0 , compiling:\n  (NO_SOURCE_PATH:0:0)\nuser=>\n(defn sub-int [n] \n  (symbol (apply str (cons '₍ (conj '₎\n    (map (comp \n      #(get subscript %) \n      int \n      str) \n    (seq (str (int n)))))))))\n#'user/sub-int\n\nuser=> (defn sub-int [n] \n  (symbol (apply str (cons '₍ (conj '₎\n    (map (comp \n      #(get subscript %) \n      int \n      str) \n    (seq (str (int n)))))))))\n:InvalidOperationException\n\"Unable to resolve symbol: n in this context\"\nclojure.lang.Compiler.ResolveIn\n  (clojure.lang.Namespace n, clojure.lang.Symbol symbol, Boolean allowPrivate) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.Resolve\n  (clojure.lang.Symbol symbol) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.AnalyzeSymbol\n  (clojure.lang.Symbol symbol) [0x00000]\n  <filename unknown>:0 \nclojure.lang.Compiler.Analyze\n  (clojure.lang.CljCompiler.Ast.ParserContext pcontext, System.Object form, System.String name) [0x00000]\n  <filename unknown>:0 , compiling:\n  (NO_SOURCE_PATH:0:0)\nuser=>  \n(defn sub-int [n] \n  (symbol (apply str (cons '₍ (conj \n    (map (comp \n      #(get subscript %) \n      int \n      str) \n    (seq (str (int n)))) '₎)))))\n#'user/sub-int\n\nuser=> (defn sub-int [n] \n  (symbol (apply str (cons '₍ (conj \n    (mapv (comp \n      #(get subscript %) \n      int \n      str) \n    (seq (str (int n)))) '₎)))))\n#'user/sub-int\n\nuser=> (sub-int 687)\n₍₎₆₈₇\n\nuser=> (defn sub-int [n] \n  (symbol (apply str (cons '₍ (conj \n    (mapv (comp \n      #(get subscript %) \n      int \n      str) \n    (seq (str (int n)))) '₎)))))\n#'user/sub-int\n\nuser=> (sub-int 687)\n₍₆₈₇₎\n\nuser=> (def subscript {0 '₀ 1 '₁ 2 '₂ 3 '₃ 4 '₄ 5 '₅ 6 '₆ 7 '₇ 8 '₈ 9 '₉ '+ '₊ '- '₋ '= '₌ :open '₍ :close '₎})\n(defn sub-int [n] \n  (symbol (apply str \n    (mapv (comp \n      #(get subscript %) \n      int \n      str) \n    (seq (str (int n)))))))\n(defn sub-list [s] \n  (symbol (apply str (concat ['₍] [s] ['₎]))))\n#'user/subscript\n\nuser=> (defn sub-list [s] \n  (symbol (apply str (concat ['₍] [s] ['₎]))))\n#'user/sub-list\n\nuser=> (defn sub-int [n] \n  (symbol (apply str \n    (mapv (comp \n      #(get subscript %) \n      int \n      str) \n    (seq (str (int n)))))))\n#'user/sub-int\n\nuser=> (sub-int 78)\n₇₈\n\nuser=> (sub-list (sub-int 78))\n₍₇₈₎\n\nuser=> (sub-list(sub-int 78))\n₍₇₈₎\n\nuser=> (sub-list(sub-list(sub-int 78)))\n₍₍₇₈₎₎\n\nuser=> (defn sub-int [n] \n  (symbol (apply str \n    (concat \n      (if (neg? n) ['₋] []) \n      (mapv (comp \n        #(get subscript %) \n        int \n        str) \n      (seq (str (int n))))))))\n#'user/sub-int\n\nuser=> (defn sub-int [n] \n  (symbol (apply str \n    (concat \n      (if (neg? n) ['₋] []) \n      (mapv (comp \n        #(get subscript %) \n        int \n        str) \n      (seq (str (int n))))))))\n#'user/sub-int\n\nuser=> (sub-int 78)\n₇₈\n\nuser=> (neg? 8)\nfalse\n\nuser=> (defn sub-int [n] \n  (symbol (apply str \n    (concat \n      (if (neg? n) ['?] []) \n      (mapv (comp \n        #(get subscript %) \n        int \n        str) \n      (seq (str (int n))))))))\n#'user/sub-int\n\nuser=> (defn sub-int [n] \n  (symbol (apply str \n    (concat \n      (if (neg? n) ['?] []) \n      (mapv (comp \n        #(get subscript % \"\") \n        int \n        str) \n      (seq (str (int n))))))))\n#'user/sub-int\n\nuser=> (sub-int 83)\n₈₃\n\nuser=> (defn sub-int [n] \n  (symbol (apply str \n    (concat \n      (if (neg? n) ['₋] ['₀]) \n      (mapv (comp \n        #(get subscript % \"\") \n        int \n        str) \n      (seq (str (int n))))))))\n#'user/sub-int\n\nuser=> (sub-int 83)\n₀₈₃\n\nuser=> '-6\n-6\n\nuser=> (defn sub-int [n] \n  (symbol (apply str \n    (concat \n      (if (neg? n) ['₋] []) \n      (mapv (comp \n        #(get subscript % '?) \n        int \n        str) \n      (seq (str (int n))))))))\n#'user/sub-int\n\nuser=> (sub-int -78)",
+			"file": "resources/public/data/inventory.csv",
 			"settings":
 			{
-				"buffer_size": 9289,
+				"buffer_size": 181482,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "> (defn vec-move [col idx offset]\n  (let [v (get col idx)\n        res (vec-dissoc col idx)\n        target-idx (valid-idx col (+ idx offset))]\n    (vec (concat (subvec res 0 target-idx) [v] (subvec res target-idx (count res))))))\n#<function selenica$core$vec_move(col,idx,offset){\nvar v = cljs.core.get.call(null,col,idx);\nvar res = selenica.core.vec_dissoc.call(null,col,idx);\nvar target_idx = selenica.core.valid_idx.call(null,col,(idx + offset));\nreturn cljs.core.vec.call(null,cljs.core.concat.call(null,cljs.core.subvec.call(null,res,(0),target_idx),new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [v], null),cljs.core.subvec.call(null,res,target_idx,cljs.core.count.call(null,res))));\n}>\nselenica.core=> (vec-move [:a :b :c :d :e :f :g] 2 -3)\n[:c :a :b :d :e :f :g]\nselenica.core=> (vec-move [:a :b :c :d :e :f :g] 2 -4)\n[:c :a :b :d :e :f :g]\nselenica.core=> (vec-move [:a :b :c :d :e :f :g] 2 4)\n[:a :b :d :e :f :g :c]\nselenica.core=> (vec-move [:a :b :c :d :e :f :g] 2 3)\n[:a :b :d :e :f :c :g]\nselenica.core=> (vec-move [:a :b :c :d :e :f :g] 2 2)\n[:a :b :d :e :c :f :g]\nselenica.core=> (vec-move [:a :b :c :d :e :f :g] 2 1)\n[:a :b :d :c :e :f :g]\nselenica.core=> (vec-move [:a :b :c :d :e :f :g] 2 0)\n[:a :b :c :d :e :f :g]\nselenica.core=> (fn [col x] (comp butlast #(take x %)) col)\n#<function (col,x){\ncljs.core.comp.call(null,cljs.core.butlast,(function (p1__18361_SHARP_){\nreturn cljs.core.take.call(null,x,p1__18361_SHARP_);\n}));\n\nreturn col;\n}>\nselenica.core=> ((fn [col x] ((comp butlast #(take x %)) col)) [1 2 3 4 5 6 7 8] 3)\n(1 2)\nselenica.core=> ((fn [col x] (map (comp butlast #(take x %)) col)) [1 2 3 4 5 6 7 8] 3)\n#<Error: 1 is not ISeqable>\n	 cljs.core.LazySeq.sval (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:10996:3)\n	 cljs.core.LazySeq.cljs$core$ISeqable$_seq$arity$1 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2905:12)\n	 cljs.core.LazySeq.cljs$core$INext$_next$arity$1 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2886:6)\n	 cljs$core$butlast (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:7999:10)\nselenica.core=> (reduce conj [1 2 3 4 5 6 7 8] )\n#<Error: No protocol method ICollection.-conj defined for type number: 1>\n	 Function.cljs.core.conj.cljs$core$IFn$_invoke$arity$2 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:1440:8)\n	 Function.cljs.core.ci_reduce.cljs$core$IFn$_invoke$arity$2 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:5202:3)\n	 cljs.core.PersistentVector.cljs$core$IReduce$_reduce$arity$2 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:4708:6)\n	 Function.cljs.core.reduce.cljs$core$IFn$_invoke$arity$2 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2046:29)\n	 cljs$core$reduce (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2033:1)\n	  (resources\\public\\js\\compiled\\out\\eval at figwheel$client$utils$eval_helper (figwheel\\client\\utils.js:114:13), <anonymous>:1:106)\nselenica.core=> (reduce conj [] [1 2 3 4 5 6 7 8] )\n[1 2 3 4 5 6 7 8]\nselenica.core=> (partition 3 [1 2 3 4 5 6 7 8] )\n((1 2 3) (4 5 6))\nselenica.core=> (cycle [1 2 3 4 5 6 7 8] )\nEval timed out!\nselenica.core=> (take 3 (cycle [1 2 3 4 5 6 7 8]))\n(1 2 3)\nselenica.core=>  (subvec [1 2 3 4 5 6 7 8] 0 3)\n[1 2 3]\nselenica.core=>  (subvec [1 2 3 4 5 6 7 8] 3 99)\n#<Error: Index out of bounds>\n	 Function.cljs.core.subvec.cljs$core$IFn$_invoke$arity$3 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:5013:7)\n	 cljs$core$subvec (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:5004:1)\n	  (resources\\public\\js\\compiled\\out\\eval at figwheel$client$utils$eval_helper (figwheel\\client\\utils.js:114:13), <anonymous>:1:106)\n	  (resources\\public\\js\\compiled\\out\\eval at figwheel$client$utils$eval_helper (figwheel\\client\\utils.js:114:13), <anonymous>:9:3)\n	  (resources\\public\\js\\compiled\\out\\eval at figwheel$client$utils$eval_helper (figwheel\\client\\utils.js:114:13), <anonymous>:14:4)\n	 figwheel$client$utils$eval_helper (jar:file:/C:/Users/jparker/.m2/repository/figwheel/figwheel/0.3.5/figwheel-0.3.5.jar!/figwheel/client/utils.cljs:47:5)\nselenica.core=>  (juxt (map #(partial 3) [take drop]))\n#<function (x,y,z,var_args){\nvar args = var_args;\nswitch(arguments.length){\ncase 0:\nreturn G__9890__0.call(this);\ncase 1:\nreturn G__9890__1.call(this,x);\ncase 2:\nreturn G__9890__2.call(this,x,y);\ncase 3:\nreturn G__9890__3.call(this,x,y,z);\ndefault:\nvar G__9894 = null;\nif (arguments.length > 3) {\nvar G__9895__i = 0, G__9895__a = new Array(arguments.length -  3);\nwhile (G__9895__i < G__9895__a.length) {G__9895__a[G__9895__i] = arguments[G__9895__i + 3]; ++G__9895__i;}\nG__9894 = new cljs.core.IndexedSeq(G__9895__a,0);\n}\nreturn G__9890__4.cljs$core$IFn$_invoke$arity$variadic(x,y,z, G__9894);\n}\nthrow(new Error('Invalid arity: ' + arguments.length));\n}>\nselenica.core=>  (juxt (map #(partial % 3) [take drop]))\n#<function (x,y,z,var_args){\nvar args = var_args;\nswitch(arguments.length){\ncase 0:\nreturn G__9890__0.call(this);\ncase 1:\nreturn G__9890__1.call(this,x);\ncase 2:\nreturn G__9890__2.call(this,x,y);\ncase 3:\nreturn G__9890__3.call(this,x,y,z);\ndefault:\nvar G__9894 = null;\nif (arguments.length > 3) {\nvar G__9895__i = 0, G__9895__a = new Array(arguments.length -  3);\nwhile (G__9895__i < G__9895__a.length) {G__9895__a[G__9895__i] = arguments[G__9895__i + 3]; ++G__9895__i;}\nG__9894 = new cljs.core.IndexedSeq(G__9895__a,0);\n}\nreturn G__9890__4.cljs$core$IFn$_invoke$arity$variadic(x,y,z, G__9894);\n}\nthrow(new Error('Invalid arity: ' + arguments.length));\n}>\nselenica.core=>  #(partial % 3)\n#<function (p1__18390_SHARP_){\nreturn cljs.core.partial.call(null,p1__18390_SHARP_,(3));\n}>\nselenica.core=>  (apply juxt (map #(partial % 3) [take drop]))\n#<function (x,y,z,var_args){\nvar args = var_args;\nswitch(arguments.length){\ncase 0:\nreturn G__9896__0.call(this);\ncase 1:\nreturn G__9896__1.call(this,x);\ncase 2:\nreturn G__9896__2.call(this,x,y);\ncase 3:\nreturn G__9896__3.call(this,x,y,z);\ndefault:\nvar G__9900 = null;\nif (arguments.length > 3) {\nvar G__9901__i = 0, G__9901__a = new Array(arguments.length -  3);\nwhile (G__9901__i < G__9901__a.length) {G__9901__a[G__9901__i] = arguments[G__9901__i + 3]; ++G__9901__i;}\nG__9900 = new cljs.core.IndexedSeq(G__9901__a,0);\n}\nreturn G__9896__4.cljs$core$IFn$_invoke$arity$variadic(x,y,z, G__9900);\n}\nthrow(new Error('Invalid arity: ' + arguments.length));\n}>\nselenica.core=>  (map #(partial % 3) [take drop])\n(#<function (x,y,z,var_args){\nvar args = var_args;\nswitch(arguments.length){\ncase 0:\nreturn G__8264__0.call(this);\ncase 1:\nreturn G__8264__1.call(this,x);\ncase 2:\nreturn G__8264__2.call(this,x,y);\ncase 3:\nreturn G__8264__3.call(this,x,y,z);\ndefault:\nvar G__8268 = null;\nif (arguments.length > 3) {\nvar G__8269__i = 0, G__8269__a = new Array(arguments.length -  3);\nwhile (G__8269__i < G__8269__a.length) {G__8269__a[G__8269__i] = arguments[G__8269__i + 3]; ++G__8269__i;}\nG__8268 = new cljs.core.IndexedSeq(G__8269__a,0);\n}\nreturn G__8264__4.cljs$core$IFn$_invoke$arity$variadic(x,y,z, G__8268);\n}\nthrow(new Error('Invalid arity: ' + arguments.length));\n}> #<function (x,y,z,var_args){\nvar args = var_args;\nswitch(arguments.length){\ncase 0:\nreturn G__8264__0.call(this);\ncase 1:\nreturn G__8264__1.call(this,x);\ncase 2:\nreturn G__8264__2.call(this,x,y);\ncase 3:\nreturn G__8264__3.call(this,x,y,z);\ndefault:\nvar G__8268 = null;\nif (arguments.length > 3) {\nvar G__8269__i = 0, G__8269__a = new Array(arguments.length -  3);\nwhile (G__8269__i < G__8269__a.length) {G__8269__a[G__8269__i] = arguments[G__8269__i + 3]; ++G__8269__i;}\nG__8268 = new cljs.core.IndexedSeq(G__8269__a,0);\n}\nreturn G__8264__4.cljs$core$IFn$_invoke$arity$variadic(x,y,z, G__8268);\n}\nthrow(new Error('Invalid arity: ' + arguments.length));\n}>)\nselenica.core=> ((fn [x col] (mapv vector (take x col)(drop x col))) [1 2 3 4 5 6])\n[]\nselenica.core=> ((fn [x col] (mapv vector (take x col)(drop x col))) 3 [1 2 3 4 5 6])\n[[1 4] [2 5] [3 6]]\nselenica.core=> ((fn [x col] (mapv vector (juxt take drop) col)) 3 [1 2 3 4 5 6])\n#<Error: function (x,y,z,var_args){\nvar args = var_args;\nswitch(arguments.length){\ncase 0:\nreturn G__9896__0.call(this);\ncase 1:\nreturn G__9896__1.call(this,x);\ncase 2:\nreturn G__9896__2.call(this,x,y);\ncase 3:\nreturn G__9896__3.call(this,x,y,z);\ndefault:\nvar G__9900 = null;\nif (arguments.length > 3) {\nvar G__9901__i = 0, G__9901__a = new Array(arguments.length -  3);\nwhile (G__9901__i < G__9901__a.length) {G__9901__a[G__9901__i] = arguments[G__9901__i + 3]; ++G__9901__i;}\nG__9900 = new cljs.core.IndexedSeq(G__9901__a,0);\n}\nreturn G__9896__4.cljs$core$IFn$_invoke$arity$variadic(x,y,z, G__9900);\n}\nthrow(new Error('Invalid arity: ' + arguments.length));\n} is not ISeqable>\n	 cljs.core.map.cljs$core$IFn$_invoke$arity$3 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:4070:15)\n	 cljs.core.LazySeq.sval (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:10996:3)\n	 cljs.core.LazySeq.cljs$core$ISeqable$_seq$arity$1 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2905:12)\n	 Function.cljs.core.seq_reduce.cljs$core$IFn$_invoke$arity$3 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2016:27)\n	 cljs.core.LazySeq.cljs$core$IReduce$_reduce$arity$3 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2915:28)\n	 Function.cljs.core.reduce.cljs$core$IFn$_invoke$arity$3 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2062:29)\n	 Function.cljs.core.into.cljs$core$IFn$_invoke$arity$2 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:4332:35)\nselenica.core=> ((fn [x col] (mapv vector (juxt #(take x %) #(drop x %)) col)) 3 [1 2 3 4 5 6])\n#<Error: function (x,y,z,var_args){\nvar args = var_args;\nswitch(arguments.length){\ncase 0:\nreturn G__9896__0.call(this);\ncase 1:\nreturn G__9896__1.call(this,x);\ncase 2:\nreturn G__9896__2.call(this,x,y);\ncase 3:\nreturn G__9896__3.call(this,x,y,z);\ndefault:\nvar G__9900 = null;\nif (arguments.length > 3) {\nvar G__9901__i = 0, G__9901__a = new Array(arguments.length -  3);\nwhile (G__9901__i < G__9901__a.length) {G__9901__a[G__9901__i] = arguments[G__9901__i + 3]; ++G__9901__i;}\nG__9900 = new cljs.core.IndexedSeq(G__9901__a,0);\n}\nreturn G__9896__4.cljs$core$IFn$_invoke$arity$variadic(x,y,z, G__9900);\n}\nthrow(new Error('Invalid arity: ' + arguments.length));\n} is not ISeqable>\n	 cljs.core.map.cljs$core$IFn$_invoke$arity$3 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:4070:15)\n	 cljs.core.LazySeq.sval (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:10996:3)\n	 cljs.core.LazySeq.cljs$core$ISeqable$_seq$arity$1 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2905:12)\n	 Function.cljs.core.seq_reduce.cljs$core$IFn$_invoke$arity$3 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2016:27)\n	 cljs.core.LazySeq.cljs$core$IReduce$_reduce$arity$3 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2915:28)\n	 Function.cljs.core.reduce.cljs$core$IFn$_invoke$arity$3 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2062:29)\n	 Function.cljs.core.into.cljs$core$IFn$_invoke$arity$2 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:4332:35)\nselenica.core=> ((fn [x col] (mapv vector ((juxt #(take x %) #(drop x %)) col))) 3 [1 2 3 4 5 6])\n[[(1 2 3)] [(4 5 6)]]\nselenica.core=> ((fn [x col] (mapv vec ((juxt #(take x %) #(drop x %)) col))) 3 [1 2 3 4 5 6])\n[[1 2 3] [4 5 6]]\nselenica.core=> ((fn [x col] (mapv vec ((partial (juxt take drop) x) col))) 3 [1 2 3 4 5 6])\n[[1 2 3] [4 5 6]]\nselenica.core=> (fn [v] #(loop [fs (reverse v) res %] \n           (if (empty? fs) res (recur (rest fs) ((first fs) res)))))\n#<function (v){\nreturn (function (p1__18419_SHARP_){\nvar fs = cljs.core.reverse.call(null,v);\nvar res = p1__18419_SHARP_;\nwhile(true){\nif(cljs.core.empty_QMARK_.call(null,fs)){\nreturn res;\n} else {\nvar G__18423 = cljs.core.rest.call(null,fs);\nvar G__18424 = cljs.core.first.call(null,fs).call(null,res);\nfs = G__18423;\nres = G__18424;\ncontinue;\n}\nbreak;\n}\n});\n}>\nselenica.core=> ((fn [v] #(loop [fs (reverse v) res %] \n           (if (empty? fs) res (recur (rest fs) ((first fs) res))))) rest reverse)\n#<function (p1__18426_SHARP_){\nvar fs = cljs.core.reverse.call(null,v);\nvar res = p1__18426_SHARP_;\nwhile(true){\nif(cljs.core.empty_QMARK_.call(null,fs)){\nreturn res;\n} else {\nvar G__18430 = cljs.core.rest.call(null,fs);\nvar G__18431 = cljs.core.first.call(null,fs).call(null,res);\nfs = G__18430;\nres = G__18431;\ncontinue;\n}\nbreak;\n}\n}>\nselenica.core=> (((fn [v] #(loop [fs (reverse v) res %] \n           (if (empty? fs) res (recur (rest fs) ((first fs) res))))) rest reverse)\n\n[1 2 3 4])\n#<Error: function cljs$core$rest(coll){\nif(!((coll == null))){\nif((function (){var G__6493 = coll;\nif(G__6493){\nvar bit__4592__auto__ = (G__6493.cljs$lang$protocol_mask$partition0$ & (64));\nif((bit__4592__auto__) || (G__6493.cljs$core$ISeq$)){\nreturn true;\n} else {\nreturn false;\n}\n} else {\nreturn false;\n}\n})()){\nreturn coll.cljs$core$ISeq$_rest$arity$1(null);\n} else {\nvar s = cljs.core.seq(coll);\nif(s){\nreturn cljs.core._rest(s);\n} else {\nreturn cljs.core.List.EMPTY;\n}\n}\n} else {\nreturn cljs.core.List.EMPTY;\n}\n} is not ISeqable>\n	 Function.cljs.core.seq_reduce.cljs$core$IFn$_invoke$arity$3 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2016:27)\n	 Function.cljs.core.reduce.cljs$core$IFn$_invoke$arity$3 (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2074:9)\n	 cljs$core$reverse (jar:file:/C:/Users/jparker/.m2/repository/org/clojure/clojurescript/0.0-2411/clojurescript-0.0-2411.jar!/cljs/core.cljs:2692:6)\n	  (resources\\public\\js\\compiled\\out\\eval at figwheel$client$utils$eval_helper (figwheel\\client\\utils.js:114:13), <anonymous>:3:28)\n	  (resources\\public\\js\\compiled\\out\\eval at figwheel$client$utils$eval_helper (figwheel\\client\\utils.js:114:13), <anonymous>:18:48)\n	  (resources\\public\\js\\compiled\\out\\eval at figwheel$client$utils$eval_helper (figwheel\\client\\utils.js:114:13), <anonymous>:26:3)\n	  (resources\\public\\js\\compiled\\out\\eval at figwheel$client$utils$eval_helper (figwheel\\client\\utils.js:114:13), <anonymous>:31:4)\n	 figwheel$client$utils$eval_helper (jar:file:/C:/Users/jparker/.m2/repository/figwheel/figwheel/0.3.5/figwheel-0.3.5.jar!/figwheel/client/utils.cljs:47:5)\nselenica.core=> (((fn [& v] #(loop [fs (reverse v) res %] \n           (if (empty? fs) res (recur (rest fs) ((first fs) res))))) rest reverse)\n\n[1 2 3 4])\n(3 2 1)\nselenica.core=> ",
+			"settings":
+			{
+				"buffer_size": 16074,
 				"line_ending": "Windows",
-				"name": "*REPL* (arcadia)",
+				"name": "*REPL* [clojurescript]",
 				"scratch": true
 			}
 		}
@@ -162,24 +170,19 @@
 	},
 	"expanded_folders":
 	[
-		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica",
-		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources",
-		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public",
-		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/data",
-		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/img",
-		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src",
-		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src/heh",
-		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src/selenica"
+		"/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/arcadia-repl"
 	],
 	"file_history":
 	[
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src/selenica/macros.clj",
+		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/img/photos/Hevelius 005.jpg",
+		"/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/arcadia-repl/test.cljs",
 		"/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/arcadia-repl/arcadia_repl.py",
 		"/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/arcadia-repl/Clojure.YAML-tmLanguage",
 		"/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/arcadia-repl/clojure-dark.YAML-tmTheme",
 		"/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/arcadia-repl/unicode.html",
 		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/lunar/lunar.sublime-project",
 		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src/heh/core.clj",
-		"/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/arcadia-repl/test.cljs",
 		"/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/arcadia-repl/unicode.cljr",
 		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src/selenica/core.cljs",
 		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src/heh/core.cljs",
@@ -208,7 +211,6 @@
 		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/archiver/src/archiver/cloud.cljs",
 		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/data/inventory.edn",
 		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/resources/public/js/xls.js",
-		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/selenica/src/selenica/macros.clj",
 		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/final/src/fast/util.cljs",
 		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/final/src/fast/element.cljs",
 		"/C/Users/jparker/Desktop/PROJECTS/joe/dev/final/src/fast/core.cljs",
@@ -236,6 +238,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"div.showcase",
+			".nouns",
 			"log",
 			".log",
 			"prn",
@@ -299,7 +303,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -308,50 +312,52 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8719,
+						"buffer_size": 10135,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								716,
-								716
+								5177,
+								5177
 							]
 						],
 						"settings":
 						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/clojure-dark.tmTheme",
 							"syntax": "Packages/arcadia-repl/Clojure.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2930.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "project.clj",
+					"file": "/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/arcadia-repl/clojure-dark.YAML-tmTheme",
 					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 2950,
+						"buffer_size": 5712,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								437,
-								267
+								263,
+								263
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Arcadia/Arcadia.tmlanguage",
+							"color_scheme": "Packages/User/Color Highlighter/themes/Sunburst.tmTheme",
+							"syntax": "Packages/Text/Plain text.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
@@ -359,37 +365,78 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "/C/Users/jparker/AppData/Roaming/Sublime Text 3/Packages/arcadia-repl/test.cljs",
+					"file": "resources/public/css/style.css",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5148,
+						"buffer_size": 4217,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3040,
-								3040
+								1185,
+								1185
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/arcadia-repl/Clojure.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"color_scheme": "Packages/User/Color Highlighter/themes/Sunburst.tmTheme",
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2070.0,
+						"translation.y": 1568.0,
 						"zoom_level": 1.0
 					},
+					"stack_index": 6,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"file": "resources/public/img/photos/Hevelius 003.jpg",
+					"semi_transient": true,
 					"stack_index": 3,
+					"type": "image"
+				},
+				{
+					"buffer": 3,
+					"file": "resources/public/data/inventory.csv",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 181482,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/Sunburst.tmTheme",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 322.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
@@ -399,36 +446,88 @@
 			"sheets":
 			[
 				{
-					"buffer": 3,
+					"buffer": 4,
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9289,
+						"buffer_size": 16074,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9289,
-								9289
+								16074,
+								16074
 							]
 						],
 						"settings":
 						{
-							"arcadia_repl": true,
+							"auto_complete": true,
+							"auto_indent": false,
 							"color_scheme": "Packages/User/Color Highlighter/themes/clojure-dark.tmTheme",
-							"scope_name": "source.repl",
+							"detect_indentation": false,
+							"gutter": false,
+							"history_arrows": true,
+							"indent_subsequent_lines": false,
+							"line_numbers": false,
+							"repl": true,
+							"repl_external_id": "clojurescript",
+							"repl_id": "77645a73d629420ab06e9aed68587693",
+							"repl_restart_args":
+							{
+								"cmd":
+								{
+									"linux":
+									[
+										"lein",
+										"figwheel"
+									],
+									"osx":
+									[
+										"lein",
+										"figwheel"
+									],
+									"windows":
+									[
+										"lein.bat",
+										"figwheel"
+									]
+								},
+								"cwd":
+								{
+									"linux": "$file_path",
+									"osx": "$file_path",
+									"windows": "$file_path"
+								},
+								"encoding": "utf8",
+								"extend_env":
+								{
+									"INSIDE_EMACS": "1"
+								},
+								"external_id": "clojurescript",
+								"soft_quit": "\n(. System exit 0)\n",
+								"syntax": "Packages/arcadia-repl/Clojure.tmLanguage",
+								"type": "subprocess"
+							},
+							"repl_sublime2": false,
+							"smart_indent": false,
+							"spell_check": false,
 							"syntax": "Packages/arcadia-repl/Clojure.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4908.0,
+						"translation.y": 4996.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
+				},
+				{
+					"file": "resources/public/img/72dpi/08.jpg",
+					"semi_transient": true,
+					"stack_index": 2,
+					"type": "image"
 				}
 			]
 		}
@@ -456,6 +555,12 @@
 				1,
 				1,
 				2
+			],
+			[
+				0,
+				2,
+				1,
+				3
 			]
 		],
 		"cols":
@@ -466,7 +571,8 @@
 		"rows":
 		[
 			0.0,
-			0.601177602553,
+			0.426803652968,
+			0.791506849315,
 			1.0
 		]
 	},
@@ -513,7 +619,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 0,
+	"selected_group": 2,
 	"settings":
 	{
 	},
@@ -521,7 +627,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 165.0,
+	"side_bar_width": 227.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
